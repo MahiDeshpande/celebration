@@ -924,7 +924,8 @@
         fork.add(tine);
       }
       fork.position.set(2.15, 1.8, 1.25);
-      fork.rotation.z = -0.9;
+      fork.rotation.z = Math.PI;
+      fork.rotation.x = -0.12;
       fork.visible = false;
       scene.add(fork);
     }
@@ -1137,15 +1138,16 @@
         sliceGroup.scale.setScalar(THREE.MathUtils.lerp(1, serveScale, eased));
         sliceGroup.rotation.y = THREE.MathUtils.lerp(0, -0.12, eased);
       } else if (activeTransition === 'bite') {
-        const startX = servePosition.x + 0.38;
-        const startZ = servePosition.z + 0.15;
+        const biteX = servePosition.x;
+        const biteZ = servePosition.z + 0.66 * serveScale;
         fork.visible = true;
         fork.position.set(
-          THREE.MathUtils.lerp(startX + 0.72, startX, eased),
-          THREE.MathUtils.lerp(2.8, 2.05, eased) + Math.sin(eased * Math.PI) * 0.16,
-          THREE.MathUtils.lerp(startZ + 0.35, startZ, eased)
+          THREE.MathUtils.lerp(biteX + 0.72, biteX, eased),
+          THREE.MathUtils.lerp(3.05, 2.41, eased) + Math.sin(eased * Math.PI) * 0.12,
+          THREE.MathUtils.lerp(biteZ + 0.35, biteZ, eased)
         );
-        fork.rotation.z = THREE.MathUtils.lerp(-0.9, -0.15, eased);
+        fork.rotation.z = Math.PI;
+        fork.rotation.x = -0.12;
         activeBitePart.scale.setScalar(1 - eased);
         activeBitePart.position.y = Math.sin(eased * Math.PI) * 0.8;
       }
