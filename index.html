@@ -52,20 +52,41 @@
     .welcome-lamp::after { content:""; position:absolute; top:104px; left:-47px; width:102px; height:45px;
       border-radius:50% 50% 6px 6px; background:linear-gradient(#f7d9a6,#b9855b); }
     .welcome-card { background: rgba(255,248,233,.88); box-shadow: 0 22px 70px rgba(37,18,14,.24); backdrop-filter: blur(13px); }
+    .college-room {
+      min-height:100svh;position:relative;isolation:isolate;overflow:hidden;
+      background:radial-gradient(ellipse at 50% 24%,#e8bb89,#956a5b 58%,#4b3431);
+    }
+    .college-card { background:rgba(255,248,236,.95);box-shadow:0 24px 80px #24171466;backdrop-filter:blur(14px); }
+    .college-row { opacity:0;transform:translateX(-18px); }
+    .college-row.checked { animation:college-in .5s ease-out forwards; }
+    .college-row.checked .college-check { opacity:1;animation:check-pop .36s cubic-bezier(.16,1.5,.4,1) both; }
+    .college-name { transition:color .35s ease; }
+    .college-row.checked .college-name { color:#a5574f;text-decoration:line-through;text-decoration-color:#c4525c;text-decoration-thickness:3px; }
+    .envelope.fade-out { pointer-events:none;animation:envelope-away .5s ease-in forwards; }
+    .recording-preview {
+      position:fixed;z-index:80;left:16px;bottom:16px;width:clamp(128px,19vw,220px);
+      aspect-ratio:4/3;overflow:hidden;border:3px solid #fff0d0;border-radius:18px;
+      background:#261a18;box-shadow:0 10px 34px #17101088;
+    }
+    .recording-preview video { width:100%;height:100%;object-fit:cover;transform:scaleX(-1); }
+    .recording-hud {
+      position:fixed;z-index:81;left:16px;bottom:calc(clamp(128px,19vw,220px) * .75 + 28px);
+      display:flex;align-items:center;gap:9px;border:1px solid #fff5;border-radius:999px;
+      background:#39231de8;padding:9px 14px;color:white;box-shadow:0 8px 24px #17101066;
+    }
+    .recording-dot { width:9px;height:9px;border-radius:50%;background:#ff625e;box-shadow:0 0 12px #ff625e;animation:record-pulse 1s infinite alternate; }
+    .recording-status { position:fixed;z-index:80;left:50%;bottom:20px;max-width:min(90vw,520px);transform:translateX(-50%);border-radius:999px;background:#39231de8;padding:10px 16px;color:white;font-size:12px;text-align:center; }
+    .capture-source { position:fixed;left:-10000px;top:0;width:2px;height:2px;opacity:0;pointer-events:none; }
     .letter-room {
       min-height:100svh; position:relative; isolation:isolate; overflow:hidden;
       background:radial-gradient(ellipse at 50% 25%,#bb8c72,#694941 65%,#3e2b28);
     }
     .letter-card { background:rgba(255,248,236,.94);box-shadow:0 24px 80px #24171466;backdrop-filter:blur(14px); }
-    .letter-stage { perspective:1000px; }
+    .letter-stage { perspective:1000px;max-height:236px;opacity:1;overflow:hidden;transition:max-height .5s ease,opacity .4s ease; }
+    .letter-stage.letter-open { max-height:0;opacity:0; }
     .envelope {
       position:relative; display:block; width:min(100%,360px); height:236px; margin:0 auto;
       border:0; background:transparent; perspective:850px; cursor:pointer;
-    }
-    .envelope-paper {
-      position:absolute; z-index:1; left:10%; bottom:18px; width:80%; height:190px; padding:25px 18px;
-      border-radius:8px; background:linear-gradient(135deg,#fffaf0,#f1d9bd); color:#754c40;
-      box-shadow:0 7px 18px #38221d33; transform:translateY(68px); transition:transform .95s cubic-bezier(.2,.8,.2,1);
     }
     .envelope-back { position:absolute;z-index:0;inset:18px 0 0;border-radius:12px;background:#bd6d62;box-shadow:0 17px 28px #3b211f38; }
     .envelope-front {
@@ -83,7 +104,6 @@
       transform:translate(-50%,-4%);transition:opacity .25s;
     }
     .letter-open .envelope-flap { transform:rotateX(180deg); }
-    .letter-open .envelope-paper { transform:translateY(-33px); }
     .letter-open .envelope-seal { opacity:0; }
     .video-reveal {
       max-height:0;opacity:0;overflow:hidden;transform:translateY(20px);
@@ -141,7 +161,7 @@
     .tabletop::before { content:""; position:absolute; top:14%;left:4%;right:4%;height:2px; background:#efbd8855; }
     .table-leg { position:absolute;z-index:-1;bottom:0;width:12%;height:19%;background:linear-gradient(90deg,#4e2f26,#815039,#45291f); }
     .table-leg.left{left:12%;transform:skew(-4deg)} .table-leg.right{right:12%;transform:skew(4deg)}
-    #mainScreen[hidden], #welcomeScreen[hidden], #letterScreen[hidden] { display:none; }
+    #mainScreen[hidden], #welcomeScreen[hidden], #letterScreen[hidden], #collegeScreen[hidden] { display:none; }
     .main-layout { position:relative; z-index:2; }
     #cakeCanvas { width:100%; height:100%; display:block; touch-action:pan-y; }
     .cake-frame {
@@ -165,6 +185,10 @@
     @keyframes shine { 0%,70%{left:-55%}100%{left:130%} }
     @keyframes float-in { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
     @keyframes toast-in { from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)} }
+    @keyframes college-in { to{opacity:1;transform:translateX(0)} }
+    @keyframes check-pop { from{transform:scale(.35) rotate(-18deg)}to{transform:scale(1) rotate(0)} }
+    @keyframes envelope-away { to{opacity:0;transform:translateY(-28px) scale(.88)} }
+    @keyframes record-pulse { to{opacity:.45;transform:scale(.82)} }
     @media(max-width:767px) {
       .welcome-room::after { width:150px;height:190px;top:7%; }
       .welcome-room .welcome-table { height:12%; }
@@ -176,6 +200,8 @@
       .cake-frame { height:320px; }
       .letter-video { min-height:190px; }
       .photo-frame { width:145px;height:178px; }
+      .recording-preview { left:10px;bottom:10px;width:132px; }
+      .recording-hud { left:10px;bottom:calc(132px * .75 + 20px); }
     }
     @media(prefers-reduced-motion:reduce) {
       *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
@@ -211,31 +237,52 @@
     </div>
   </main>
 
+  <main id="collegeScreen" class="screen college-room flex items-center justify-center px-4 py-8 sm:px-6" hidden>
+    <section class="college-card float-in mx-auto w-full max-w-2xl rounded-[2rem] p-6 text-center sm:p-10">
+      <p class="mb-2 text-xs font-black uppercase tracking-[.28em] text-[#a5574f]">three big goals, all checked off</p>
+      <h1 class="font-display text-3xl font-bold text-[#402923] sm:text-5xl">Look how far you’ve come</h1>
+      <p class="mt-3 text-sm leading-relaxed text-[#806458]">One by one, every college on your list became a real accomplishment.</p>
+      <ul id="collegeList" class="mx-auto my-8 max-w-lg space-y-3 text-left" aria-label="Completed college goals">
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="0">
+          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
+          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">Georgia Tech</span>
+        </li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="1">
+          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
+          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">University of Georgia</span>
+        </li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="2">
+          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
+          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">UT Austin</span>
+        </li>
+      </ul>
+      <p class="mb-5 text-sm font-semibold text-[#8b6e5b]">I’m so proud of you for every step that got you here. ♡</p>
+      <div class="flex flex-col items-center gap-3">
+        <button id="recordButton" type="button" class="rounded-full border border-[#a64250]/40 bg-white/70 px-6 py-3 text-sm font-bold text-[#8d3948] transition hover:bg-white focus:outline-none focus:ring-4 focus:ring-rose-200">
+          <span aria-hidden="true">📹</span> Record my reaction
+        </button>
+        <p class="max-w-md text-xs leading-relaxed text-[#8b6e5b]">Recording is optional. Choose the screen or browser tab showing this page, allow camera and microphone access, and share tab audio if prompted. Your reaction appears at the bottom left. The recording is saved on your device and never uploaded.</p>
+        <button id="collegeNextButton" type="button" class="btn-shine hidden rounded-full bg-gradient-to-r from-[#b84856] to-[#d16b5b] px-8 py-3 font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-rose-200">
+          Open your letter <span aria-hidden="true">💌</span>
+        </button>
+      </div>
+    </section>
+  </main>
+
   <main id="letterScreen" class="screen letter-room flex items-center justify-center px-4 py-8 sm:px-6" hidden>
     <section class="letter-card float-in mx-auto w-full max-w-3xl rounded-[2rem] p-5 text-center sm:p-9">
-      <p class="mb-2 text-xs font-black uppercase tracking-[.28em] text-[#a5574f]">a little note for you</p>
-      <h1 class="mb-1 font-display text-3xl font-bold text-[#402923] sm:text-4xl">Something I wanted you to see</h1>
-      <p class="mb-4 text-sm text-[#806458]">Open your letter, then watch your surprise.</p>
       <div id="letterStage" class="letter-stage">
         <button id="envelopeButton" class="envelope" type="button" aria-label="Open your letter" aria-expanded="false">
-          <span class="envelope-paper">
-            <span class="block font-display text-xl font-bold">Dear Pranesh,</span>
-            <span class="mt-3 block text-sm leading-relaxed">I am so proud of you. You did it! ♡</span>
-          </span>
           <span class="envelope-back"></span>
           <span class="envelope-front"></span>
           <span class="envelope-flap"></span>
           <span class="envelope-seal" aria-hidden="true">♡</span>
         </button>
       </div>
-      <button id="openLetterButton" class="btn-shine rounded-full bg-[#a64250] px-7 py-3 font-bold text-white shadow-lg transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-rose-200">
-        Open your letter <span aria-hidden="true">💌</span>
-      </button>
       <div id="videoPanel" class="video-reveal mt-6 text-left" hidden>
-        <p class="mb-3 text-center font-display text-xl font-bold text-[#54352b]">A little memory for the big moment</p>
-        <video id="surpriseVideo" class="letter-video" src="assets/video.mp4" controls playsinline preload="metadata" aria-label="A special video for Pranesh"></video>
+        <video id="surpriseVideo" class="letter-video" src="assets/video.mp4" controls playsinline preload="auto" aria-label="A special video for Pranesh"></video>
         <div class="mt-4 flex flex-col items-center justify-between gap-3 sm:flex-row">
-          <p id="videoMessage" class="text-xs text-[#806458]">Watch your message, then continue to the cake.</p>
+          <p id="videoMessage" class="text-xs text-[#806458]" aria-live="polite">Watch your message, then continue to the cake.</p>
           <button id="nextButton" class="btn-shine rounded-full bg-gradient-to-r from-[#b84856] to-[#d16b5b] px-8 py-3 font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 focus:outline-none focus:ring-4 focus:ring-rose-200">
             Next: the cake <span aria-hidden="true">🍰</span>
           </button>
@@ -243,6 +290,18 @@
       </div>
     </section>
   </main>
+
+  <div id="recordingHud" class="hidden" aria-label="Reaction recording controls">
+    <div class="recording-preview">
+      <video id="recordingPreview" autoplay muted playsinline aria-label="Your camera reaction preview"></video>
+    </div>
+    <div class="recording-hud">
+      <span class="recording-dot" aria-hidden="true"></span>
+      <span id="recordingTimer" class="text-xs font-bold tabular-nums">REC</span>
+      <button id="stopRecordingButton" type="button" class="rounded-full bg-white/15 px-3 py-1.5 text-xs font-bold text-white transition hover:bg-white/25 focus:outline-none focus:ring-2 focus:ring-white">Stop and save</button>
+    </div>
+  </div>
+  <p id="recordingStatus" class="recording-status hidden" role="status" aria-live="polite"></p>
 
   <main id="mainScreen" class="screen celebration-room px-4 pb-8 pt-6 sm:px-8 sm:pt-9" hidden>
     <div class="room-wall" aria-hidden="true">
@@ -258,12 +317,12 @@
           <span>✦</span> a huge, well-deserved celebration <span>✦</span>
         </div>
         <h1 class="celebration-title font-display text-4xl font-black uppercase leading-none tracking-wide text-[#fff0d1] sm:text-6xl">GT APPS OVER!</h1>
-        <p class="mt-2 text-sm font-medium tracking-wide text-[#ffe8cb] sm:text-base">You made it, Pranesh. I’m ridiculously proud of you. <span aria-hidden="true">🥳</span></p>
+        <p class="mt-2 text-sm font-medium leading-relaxed tracking-wide text-[#ffe8cb] sm:text-base">THEYRE FINALLY OVER. You can finally get good sleep. Im gen sososososos proud of you. ts like a massive milestone <span aria-hidden="true">🥳</span></p>
       </header>
       <section class="grid items-end gap-2 md:grid-cols-[1fr_190px] md:gap-4">
         <div class="relative">
           <div class="cake-frame rounded-3xl border border-white/15 bg-white/[.055] shadow-[0_26px_80px_rgba(32,18,14,.25)] backdrop-blur-[2px]">
-            <canvas id="cakeCanvas" aria-label="Interactive chocolate cake on a candle-lit table; drag to look around"></canvas>
+            <canvas id="cakeCanvas" aria-label="Interactive chocolate cake on a table; move the cursor along the guide to cut"></canvas>
             <div id="canvasNote" class="canvas-note rounded-full border border-white/25 bg-[#39231dcc] px-3 py-1.5 text-[10px] font-semibold tracking-wide text-[#fff0d2] sm:text-xs">drag to admire the cake ✨</div>
           </div>
           <div class="hearts" aria-hidden="true"><span class="heart text-xl">♥</span><span class="heart text-2xl">♥</span><span class="heart text-lg">♥</span></div>
@@ -273,7 +332,7 @@
             <span class="absolute -left-6 top-3 text-2xl text-[#ffdc9c] sparkle" aria-hidden="true">✧</span>
             <span class="absolute -right-6 top-10 text-xl text-[#ffdc9c] sparkle" aria-hidden="true">✦</span>
             <img id="memoryPhoto" class="photo-frame" src="assets/WhatsApp Image 2026-10-14 at 11.17.52 PM.jpeg" alt="A favorite photo, 1 of 8" width="190" height="235">
-            <figcaption id="memoryCaption" class="mt-2 text-center text-xs font-bold tracking-wide text-[#ffecd0]">little moments, big memories ♡</figcaption>
+            <figcaption id="memoryCaption" class="mt-2 max-w-[205px] text-center text-xs font-bold leading-relaxed tracking-wide text-[#ffecd0]">I’ll always be here to cheer you for your big moments ♡</figcaption>
           </figure>
         </aside>
       </section>
@@ -305,16 +364,22 @@
     import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
     const welcomeScreen = document.querySelector('#welcomeScreen');
+    const collegeScreen = document.querySelector('#collegeScreen');
     const letterScreen = document.querySelector('#letterScreen');
     const mainScreen = document.querySelector('#mainScreen');
     const canvas = document.querySelector('#cakeCanvas');
     const letterStage = document.querySelector('#letterStage');
     const envelopeButton = document.querySelector('#envelopeButton');
-    const openLetterButton = document.querySelector('#openLetterButton');
     const videoPanel = document.querySelector('#videoPanel');
     const surpriseVideo = document.querySelector('#surpriseVideo');
     const videoMessage = document.querySelector('#videoMessage');
     const nextButton = document.querySelector('#nextButton');
+    const collegeNextButton = document.querySelector('#collegeNextButton');
+    const recordingPreview = document.querySelector('#recordingPreview');
+    const recordingHud = document.querySelector('#recordingHud');
+    const recordingStatus = document.querySelector('#recordingStatus');
+    const recordingTimer = document.querySelector('#recordingTimer');
+    const stopRecordingButton = document.querySelector('#stopRecordingButton');
     const memoryPhoto = document.querySelector('#memoryPhoto');
     const cutButton = document.querySelector('#cutButton');
     const serveButton = document.querySelector('#serveButton');
@@ -354,7 +419,6 @@
     let cakeDetails = [];
     let knife;
     let fork;
-    let flame;
     let guideLine;
     let progressLine;
     let servingPlate;
@@ -367,11 +431,19 @@
     let animationFrame;
     let toastTimer;
     let photoTimer;
+    let recordingStream;
+    let screenStream;
+    let cameraStream;
+    let recordingAudioContext;
+    let mediaRecorder;
+    let recordingChunks = [];
+    let recordingTimerInterval;
+    let recordingStartedAt = 0;
+    let recordingFinishing = false;
     let phase = 'whole';
     let transitionStart = 0;
     let activeTransition = '';
     let pointerStart = null;
-    let draggingKnife = false;
     const clock = new THREE.Clock();
     const pointer = new THREE.Vector2();
     const raycaster = new THREE.Raycaster();
@@ -413,27 +485,49 @@
       window.setTimeout(() => confettiBurst(100, 65), 550);
     }
 
-    document.querySelector('#startButton').addEventListener('click', () => {
+    function showCollegeScreen() {
       welcomeScreen.hidden = true;
-      letterScreen.hidden = false;
-      confettiBurst(115, 72);
+      collegeScreen.hidden = false;
+      const rows = [...document.querySelectorAll('.college-row')];
+      rows.forEach((row, index) => {
+        window.setTimeout(() => {
+          row.classList.add('checked');
+          row.setAttribute('aria-label', `${row.querySelector('.college-name').textContent}, completed`);
+          if (index === rows.length - 1) {
+            window.setTimeout(() => collegeNextButton.classList.remove('hidden'), reducedMotion ? 0 : 650);
+          }
+        }, reducedMotion ? index * 80 : 650 + index * 820);
+      });
+      confettiBurst(75, 65);
+    }
+
+    document.querySelector('#startButton').addEventListener('click', () => {
+      showCollegeScreen();
     });
 
     function openLetter() {
       if (letterStage.classList.contains('letter-open')) return;
       letterStage.classList.add('letter-open');
       envelopeButton.setAttribute('aria-expanded', 'true');
-      openLetterButton.disabled = true;
-      openLetterButton.classList.add('opacity-60');
-      window.setTimeout(() => {
-        videoPanel.hidden = false;
-        requestAnimationFrame(() => videoPanel.classList.add('visible'));
-        openLetterButton.classList.add('hidden');
-      }, reducedMotion ? 0 : 620);
+      envelopeButton.classList.add('fade-out');
+      window.setTimeout(() => { letterStage.hidden = true; }, reducedMotion ? 0 : 500);
+      videoPanel.hidden = false;
+      requestAnimationFrame(() => videoPanel.classList.add('visible'));
+      const playback = surpriseVideo.play();
+      playback.then(() => {
+        videoMessage.textContent = 'Audio is on. Watch your message, then continue to the cake.';
+      }).catch(error => {
+        console.warn('Video autoplay with sound was blocked by the browser.', error);
+        videoMessage.textContent = 'Tap play to watch the video with sound, then continue to the cake.';
+      });
     }
 
     envelopeButton.addEventListener('click', openLetter);
-    openLetterButton.addEventListener('click', openLetter);
+    collegeNextButton.addEventListener('click', () => {
+      collegeScreen.hidden = true;
+      letterScreen.hidden = false;
+      confettiBurst(110, 72);
+    });
     surpriseVideo.addEventListener('error', () => {
       videoMessage.textContent = 'The video could not load. You can still continue to the cake.';
       showToast('The video file could not be loaded.');
@@ -453,17 +547,173 @@
       }, 3000);
     }
 
+    function setRecordingStatus(message) {
+      recordingStatus.textContent = message;
+      recordingStatus.classList.remove('hidden');
+    }
+
+    function stopTracks(stream) {
+      if (stream) stream.getTracks().forEach(track => track.stop());
+    }
+
+    function releaseRecordingResources() {
+      window.clearInterval(recordingTimerInterval);
+      recordingTimerInterval = undefined;
+      recordingHud.classList.add('hidden');
+      recordingPreview.srcObject = null;
+      stopTracks(screenStream);
+      stopTracks(cameraStream);
+      stopTracks(recordingStream);
+      screenStream = undefined;
+      cameraStream = undefined;
+      recordingStream = undefined;
+      if (recordingAudioContext && recordingAudioContext.state !== 'closed') {
+        const contextToClose = recordingAudioContext;
+        recordingAudioContext = undefined;
+        contextToClose.close().catch(error => console.warn('Could not close the recording audio context.', error));
+      }
+      mediaRecorder = undefined;
+      recordingFinishing = false;
+    }
+
+    function finishRecording() {
+      if (!mediaRecorder || recordingFinishing) return;
+      recordingFinishing = true;
+      stopRecordingButton.disabled = true;
+      stopRecordingButton.textContent = 'Saving...';
+      if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    }
+
+    async function startReactionRecording() {
+      const recordButton = document.querySelector('#recordButton');
+      if (!window.isSecureContext || !navigator.mediaDevices?.getDisplayMedia || !navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) {
+        setRecordingStatus('Screen and camera recording needs a modern browser on HTTPS. GitHub Pages supports it.');
+        return;
+      }
+      recordButton.disabled = true;
+      recordButton.textContent = 'Waiting for permission...';
+      setRecordingStatus('Choose a screen to share, then allow camera and microphone access.');
+      const AudioContextType = window.AudioContext || window.webkitAudioContext;
+      if (AudioContextType) {
+        recordingAudioContext = new AudioContextType();
+        recordingAudioContext.resume().catch(error => console.warn('Could not resume the recording audio context.', error));
+      }
+      try {
+        const screenRequest = navigator.mediaDevices.getDisplayMedia({
+          video: { frameRate: { ideal: 30, max: 60 } },
+          audio: true
+        });
+        const cameraRequest = navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user' },
+          audio: true
+        });
+        const [screenResult, cameraResult] = await Promise.allSettled([screenRequest, cameraRequest]);
+        if (screenResult.status === 'rejected' || cameraResult.status === 'rejected') {
+          if (screenResult.status === 'fulfilled') stopTracks(screenResult.value);
+          if (cameraResult.status === 'fulfilled') stopTracks(cameraResult.value);
+          const permissionError = screenResult.status === 'rejected' ? screenResult.reason : cameraResult.reason;
+          throw permissionError;
+        }
+        screenStream = screenResult.value;
+        cameraStream = cameraResult.value;
+        recordingPreview.srcObject = cameraStream;
+        await recordingPreview.play();
+
+        const tracks = [...screenStream.getVideoTracks()];
+        let recordingAudioTracks = [];
+        if (recordingAudioContext) {
+          const audioDestination = recordingAudioContext.createMediaStreamDestination();
+          for (const sourceStream of [screenStream, cameraStream]) {
+            const audioTracks = sourceStream.getAudioTracks();
+            if (audioTracks.length) {
+              recordingAudioContext.createMediaStreamSource(new MediaStream(audioTracks)).connect(audioDestination);
+            }
+          }
+          await recordingAudioContext.resume();
+          recordingAudioTracks = audioDestination.stream.getAudioTracks();
+        } else {
+          const audioTrack = screenStream.getAudioTracks()[0] || cameraStream.getAudioTracks()[0];
+          if (audioTrack) recordingAudioTracks = [audioTrack];
+        }
+        if (recordingAudioTracks.length === 0) {
+          throw new Error('No audio track was shared. Allow the microphone or share tab audio and try again.');
+        }
+        tracks.push(...recordingAudioTracks);
+        recordingStream = new MediaStream(tracks);
+        const preferredTypes = ['video/webm;codecs=vp9,opus', 'video/webm;codecs=vp8,opus', 'video/mp4'];
+        const mimeType = preferredTypes.find(type => MediaRecorder.isTypeSupported(type));
+        mediaRecorder = new MediaRecorder(recordingStream, mimeType ? { mimeType } : undefined);
+        recordingChunks = [];
+        mediaRecorder.addEventListener('dataavailable', event => {
+          if (event.data.size > 0) recordingChunks.push(event.data);
+        });
+        mediaRecorder.addEventListener('error', event => {
+          console.error('The reaction recording failed.', event.error);
+          setRecordingStatus('Recording failed. Check browser permissions and available storage, then try again.');
+        });
+        mediaRecorder.addEventListener('stop', () => {
+          const blob = new Blob(recordingChunks, { type: mediaRecorder.mimeType || 'video/webm' });
+          if (blob.size > 0) {
+            const extension = blob.type.includes('mp4') ? 'mp4' : 'webm';
+            const url = URL.createObjectURL(blob);
+            const download = document.createElement('a');
+            download.href = url;
+            download.download = `pranesh-reaction.${extension}`;
+            document.body.append(download);
+            download.click();
+            download.remove();
+            window.setTimeout(() => URL.revokeObjectURL(url), 60_000);
+            setRecordingStatus('Recording saved to your downloads. Nothing was uploaded.');
+          } else {
+            setRecordingStatus('No recording data was captured. Please try again.');
+          }
+          releaseRecordingResources();
+          recordButton.disabled = false;
+          recordButton.innerHTML = '<span aria-hidden="true">📹</span> Record my reaction';
+          stopRecordingButton.disabled = false;
+          stopRecordingButton.textContent = 'Stop and save';
+        });
+        const screenTrack = screenStream.getVideoTracks()[0];
+        screenTrack.addEventListener('ended', finishRecording, { once: true });
+        mediaRecorder.start(1000);
+        recordingStartedAt = Date.now();
+        recordingTimer.textContent = 'REC 00:00';
+        recordingHud.classList.remove('hidden');
+        recordingTimerInterval = window.setInterval(() => {
+          const seconds = Math.floor((Date.now() - recordingStartedAt) / 1000);
+          recordingTimer.textContent = `REC ${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        }, 1000);
+        recordButton.textContent = 'Recording in progress';
+        setRecordingStatus('Recording screen and camera. Use Stop and save when you’re done.');
+      } catch (error) {
+        console.error('Could not start the reaction recording.', error);
+        releaseRecordingResources();
+        recordButton.disabled = false;
+        recordButton.innerHTML = '<span aria-hidden="true">📹</span> Record my reaction';
+        if (error.name === 'NotAllowedError' || error.name === 'AbortError') {
+          setRecordingStatus('Screen or camera access was cancelled. Select both permissions to record.');
+        } else if (error.name === 'NotFoundError' || error.name === 'DevicesNotFoundError') {
+          setRecordingStatus('A camera or microphone was not found. Connect one and try again.');
+        } else {
+          setRecordingStatus(`Recording could not start: ${error.message || 'check browser permissions and try again.'}`);
+        }
+      }
+    }
+
+    document.querySelector('#recordButton').addEventListener('click', startReactionRecording);
+    stopRecordingButton.addEventListener('click', finishRecording);
+
     function createCakeLayer(radius, height, bottom, material, name, cutout) {
       let geometry;
       let positionY;
       if (cutout) {
-      const start = sliceAngle + sliceHalfAngle;
-      const end = sliceAngle - sliceHalfAngle + Math.PI * 2;
-      const shape = new THREE.Shape();
-      shape.moveTo(radius * Math.cos(start), radius * Math.sin(start));
-      shape.absarc(0, 0, radius, start, end, false);
-      shape.lineTo(0, 0);
-      shape.closePath();
+        const start = sliceAngle + sliceHalfAngle;
+        const end = sliceAngle - sliceHalfAngle + Math.PI * 2;
+        const shape = new THREE.Shape();
+        shape.moveTo(radius * Math.cos(start), radius * Math.sin(start));
+        shape.absarc(0, 0, radius, start, end, false);
+        shape.lineTo(0, 0);
+        shape.closePath();
         geometry = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled: false, curveSegments: 72 });
         geometry.rotateX(Math.PI / 2);
         positionY = bottom + height;
@@ -605,26 +855,6 @@
       servingPlate.visible = false;
       servingPlate.traverse(child => { if (child.isMesh) child.castShadow = child.receiveShadow = true; });
       scene.add(servingPlate);
-    }
-
-    function addCandle() {
-      const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.06, 0.46, 24), color('#fff0cc', 0.34));
-      candle.position.set(-0.34, cakeBaseY + 1.43, -0.15);
-      candle.castShadow = true;
-      scene.add(candle);
-      const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.059, 0.06, 0.09, 24), color('#db6470', 0.32));
-      stripe.position.set(-0.34, candle.position.y - 0.03, -0.15);
-      scene.add(stripe);
-      const wick = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.075, 8), color('#39241d'));
-      wick.position.set(-0.34, candle.position.y + 0.25, -0.15);
-      scene.add(wick);
-      flame = new THREE.Mesh(new THREE.SphereGeometry(0.07, 18, 16), new THREE.MeshBasicMaterial({ color: '#ffb53c' }));
-      flame.scale.set(0.72, 1.7, 0.72);
-      flame.position.set(-0.34, candle.position.y + 0.34, -0.15);
-      scene.add(flame);
-      const glow = new THREE.PointLight('#ffc65e', 1.2, 3.4);
-      glow.position.copy(flame.position);
-      scene.add(glow);
     }
 
     function addKnife() {
@@ -784,28 +1014,13 @@
       return { distance: closestDistance, progress: closestProgress };
     }
 
-    function beginKnifeDrag(event) {
-      if (phase !== 'cut-ready' || event.button !== 0) return;
-      const point = raycastPlane(event);
-      if (!point) return;
-      const nearest = closestRoutePosition(point);
-      const onKnife = raycaster.intersectObjects(knife.children, true).length > 0;
-      if (!onKnife && (nearest.distance > 0.42 || nearest.progress > 0.3)) return;
-      draggingKnife = true;
-      controls.enabled = false;
-      canvas.classList.add('interactive-cake');
-      canvas.style.touchAction = 'none';
-      canvas.setPointerCapture(event.pointerId);
-      event.preventDefault();
-    }
-
     function moveKnifeDrag(event) {
-      if (!draggingKnife) return;
+      if (phase !== 'cut-ready') return;
       const point = raycastPlane(event);
       if (!point) return;
       const nearest = closestRoutePosition(point);
       const next = nearest.progress;
-      if (nearest.distance <= 0.36 && next >= cutProgressValue - 0.16 && next <= cutProgressValue + 0.56) {
+      if (nearest.distance <= 0.36 && next >= cutProgressValue - 0.16 && next <= cutProgressValue + 1.2) {
         setCutProgress(Math.max(cutProgressValue, next));
       }
     }
@@ -826,26 +1041,16 @@
 
     canvas.addEventListener('pointerdown', event => {
       pointerStart = { x: event.clientX, y: event.clientY };
-      beginKnifeDrag(event);
     });
     canvas.addEventListener('pointermove', moveKnifeDrag);
     canvas.addEventListener('pointerup', event => {
-      if (draggingKnife) {
-        moveKnifeDrag(event);
-        draggingKnife = false;
-        controls.enabled = true;
-        canvas.style.touchAction = 'pan-y';
-        if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
-      } else if (pointerStart && Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) < 8) {
+      if (pointerStart && Math.hypot(event.clientX - pointerStart.x, event.clientY - pointerStart.y) < 8) {
         tryCanvasAction(event);
       }
       pointerStart = null;
     });
     canvas.addEventListener('pointercancel', () => {
-      draggingKnife = false;
       pointerStart = null;
-      if (controls) controls.enabled = true;
-      canvas.style.touchAction = 'pan-y';
     });
 
     function initScene() {
@@ -892,7 +1097,6 @@
       scene.add(fill);
       addRoomAndTable();
       addCakeDetails();
-      addCandle();
       addKnife();
       addSlice();
       addFork();
@@ -916,10 +1120,6 @@
     function animate() {
       animationFrame = window.requestAnimationFrame(animate);
       const elapsed = clock.getElapsedTime();
-      if (flame) {
-        flame.scale.y = 1.65 + Math.sin(elapsed * 11) * 0.2;
-        flame.rotation.z = Math.sin(elapsed * 8) * 0.12;
-      }
       if (knife && phase === 'whole') knife.position.y = 3.25 + Math.sin(elapsed * 2.2) * 0.045;
       if (activeTransition) updateTransition();
       controls.update();
@@ -993,6 +1193,7 @@
       if (phase !== 'whole') return;
       phase = 'cut-ready';
       controls.enabled = false;
+      canvas.style.touchAction = 'none';
       knife.position.set(cutRoute[0].x, cakeTopY + 0.72, cutRoute[0].z);
       knife.rotation.set(0, 0, 0);
       guideLine.visible = true;
@@ -1000,10 +1201,10 @@
       cutProgress.classList.remove('hidden');
       cutButton.classList.add('hidden');
       canvas.classList.add('interactive-cake');
-      document.querySelector('#canvasNote').textContent = 'drag the knife along the glowing line ✨';
+      document.querySelector('#canvasNote').textContent = 'move your cursor along the glowing line ✨';
       statusTitle.textContent = 'Your turn to cut! 🔪';
-      statusMessage.textContent = 'Grab the knife at the center and trace the whole glowing line.';
-      showToast('Follow the glowing guide all the way around the slice.');
+      statusMessage.textContent = 'Move your cursor along the whole glowing line. No click or drag needed.';
+      showToast('Just move your cursor along the glowing guide.');
     });
 
     function finishCut() {
@@ -1021,6 +1222,7 @@
       guideLine.visible = false;
       progressLine.visible = false;
       controls.enabled = true;
+      canvas.style.touchAction = 'pan-y';
       knife.visible = false;
       cutProgress.classList.add('hidden');
       canvas.classList.remove('interactive-cake');
