@@ -1,6 +1,6 @@
 # A celebration for Pranesh
 
-A single-page celebration site built as a static `index.html`. Three.js, Tailwind CSS, and canvas-confetti are loaded from public CDNs; no build step or server-side code is required.
+A single-page celebration site built as a static `index.html`. Three.js, Tailwind CSS, and canvas-confetti are loaded from public CDNs; no build step or server-side code is required. The supplied video and photos live in `assets/` and are served directly as static files.
 
 ## Preview locally
 
@@ -13,4 +13,6 @@ Open `index.html` in a modern browser with an internet connection.
 3. Select the `main` branch and the `/ (root)` folder, then save.
 4. Open the Pages URL shown on that settings page once deployment finishes.
 
-The site is responsive and honors the device's reduced-motion preference. Its 3D scene and confetti require JavaScript and an internet connection to load the CDN libraries.
+The flow is welcome, open the 3D letter, watch the video, continue to the cake, drag the knife along the glowing guide, serve the separated slice, and click the slice for three bites. The photo frame rotates through the supplied photos every three seconds.
+
+The site is responsive and honors the device's reduced-motion preference. The 3D scene and confetti require JavaScript and an internet connection to load the CDN libraries. The Three.js canvas is transparent so the room styling shows through it.
