@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#3a231c">
+  <meta name="description" content="A little celebration for Pranesh: GT Apps are finally over!">
+  <title>GT Apps Are Over! — A celebration for Pranesh</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: { extend: { fontFamily: {
+        display: ['Georgia', 'serif'],
+        sans: ['ui-sans-serif', 'system-ui', 'sans-serif']
+      } } }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  <style>
+    :root { color-scheme: light; --cream: #fff5e5; --berry: #a94152; --ink: #402923; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; color: var(--ink); background: #241715; }
+    button { -webkit-tap-highlight-color: transparent; }
+    .screen { min-height: 100svh; }
+    .welcome-room {
+      position: relative; isolation: isolate; overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 5%, rgba(255,224,163,.7), transparent 42%),
+        linear-gradient(180deg, #735047 0%, #a77360 58%, #694234 58%, #49302a 100%);
+    }
+    .welcome-room::before, .room-wall::before {
+      content: ""; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+      background: repeating-linear-gradient(90deg, transparent 0 24%, rgba(255,255,255,.035) 24.2% 24.5%, transparent 24.7% 49%);
+    }
+    .welcome-room::after {
+      content: ""; position: absolute; width: 210px; height: 255px; top: 8%;
+      left: 50%; transform: translateX(-50%); z-index: -1; border: 9px solid #e9c89a;
+      border-bottom-width: 14px; border-radius: 120px 120px 4px 4px;
+      background: linear-gradient(180deg, rgba(255,226,169,.65), rgba(251,187,144,.12));
+      box-shadow: 0 0 70px rgba(255,220,160,.24), inset 0 0 35px rgba(255,235,187,.25);
+    }
+    .welcome-table {
+      position: absolute; left: 50%; bottom: -3px; transform: translateX(-50%);
+      width: min(100%, 820px); height: 13%; min-height: 75px; border-radius: 50% 50% 0 0 / 28% 28% 0 0;
+      background: linear-gradient(180deg, #b8754d 0%, #92583c 12%, #623b2e 44%, #422923 100%);
+      box-shadow: 0 -10px 28px rgba(37,18,14,.18);
+    }
+    .welcome-lamp {
+      position: absolute; width: 8px; height: 115px; left: 50%; top: 0; background: #e8c495;
+      box-shadow: 0 0 45px 20px rgba(255,208,129,.19);
+    }
+    .welcome-lamp::after { content:""; position:absolute; top:104px; left:-47px; width:102px; height:45px;
+      border-radius:50% 50% 6px 6px; background:linear-gradient(#f7d9a6,#b9855b); }
+    .welcome-card { background: rgba(255,248,233,.88); box-shadow: 0 22px 70px rgba(37,18,14,.24); backdrop-filter: blur(13px); }
+    .celebration-room {
+      position: relative; isolation: isolate; min-height: 100svh; overflow: hidden;
+      background: linear-gradient(180deg,#593c38 0%,#876254 48%,#614234 48.2%,#352521 100%);
+    }
+    .room-wall { position:absolute; inset:0 0 44% 0; z-index:-2; overflow:hidden; }
+    .window {
+      position:absolute; top:4%; left:7%; width:clamp(105px,17vw,195px); height:clamp(120px,24vh,235px);
+      border:9px solid #e6c695; border-bottom-width:13px; border-radius:100px 100px 5px 5px;
+      background:linear-gradient(150deg,#ffc875 0%,#ed9a78 45%,#b96c69 100%);
+      box-shadow:inset 0 0 35px rgba(255,242,192,.6),0 0 55px rgba(255,198,127,.19);
+    }
+    .window::before,.window::after { content:""; position:absolute; background:rgba(255,236,196,.62); }
+    .window::before { top:0;bottom:0;left:50%;width:5px;transform:translateX(-50%); }
+    .window::after { left:0;right:0;top:54%;height:5px; }
+    .room-picture {
+      position:absolute; top:13%; right:11%; width:120px; height:96px; border:8px solid #d0a875;
+      background:linear-gradient(150deg,#fae2ae 0 50%,#be8d71 51%); box-shadow:0 8px 25px #39231c55;
+      transform:rotate(3deg);
+    }
+    .room-picture::after { content:"✿"; display:grid; place-items:center; height:100%; font-size:46px; color:#a94f52; }
+    .fairy-lights { position:absolute; inset:0 0 auto; height:85px; pointer-events:none; }
+    .fairy-lights::before { content:""; position:absolute; left:-2%; right:-2%; top:-44px; height:105px; border-bottom:2px solid #e1bb82; border-radius:50%; }
+    .fairy-lights i { position:absolute; top:38px; width:9px; height:13px; border-radius:50%; background:#ffe3a0; box-shadow:0 0 14px 4px #ffe69e; animation:twinkle 1.8s ease-in-out infinite alternate; }
+    .fairy-lights i:nth-child(1){left:12%;animation-delay:.2s}.fairy-lights i:nth-child(2){left:25%;top:52px;animation-delay:1s}
+    .fairy-lights i:nth-child(3){left:40%;top:60px;animation-delay:.5s}.fairy-lights i:nth-child(4){left:57%;top:59px;animation-delay:1.2s}
+    .fairy-lights i:nth-child(5){left:73%;top:50px;animation-delay:.8s}.fairy-lights i:nth-child(6){left:89%;top:36px;animation-delay:.4s}
+    .room-floor {
+      position:absolute;z-index:-1;bottom:0;left:0;right:0;height:39%;
+      background:repeating-linear-gradient(0deg,transparent 0 35px,rgba(255,221,174,.075) 36px 38px),
+        linear-gradient(90deg,transparent 24.8%,rgba(255,221,174,.09) 25%,transparent 25.2%,transparent 74.8%,rgba(255,221,174,.09) 75%,transparent 75.2%);
+    }
+    .tabletop {
+      position:absolute; z-index:0; bottom:15%; left:-8%; width:116%; height:18%; border-radius:50% 50% 0 0 / 24% 24% 0 0;
+      background:linear-gradient(180deg,#cd9160 0%,#a96642 10%,#7d4934 100%);
+      box-shadow:0 -14px 32px #26151044, inset 0 8px 13px #f1c39138;
+    }
+    .tabletop::before { content:""; position:absolute; top:14%;left:4%;right:4%;height:2px; background:#efbd8855; }
+    .table-leg { position:absolute;z-index:-1;bottom:0;width:12%;height:19%;background:linear-gradient(90deg,#4e2f26,#815039,#45291f); }
+    .table-leg.left{left:12%;transform:skew(-4deg)} .table-leg.right{right:12%;transform:skew(4deg)}
+    #mainScreen[hidden], #welcomeScreen[hidden] { display:none; }
+    .main-layout { position:relative; z-index:2; }
+    #cakeCanvas { width:100%; height:100%; display:block; touch-action:pan-y; }
+    .cake-frame {
+      position:relative; height:clamp(315px,46vw,490px); overflow:hidden; border-radius:28px;
+      background:radial-gradient(ellipse at 50% 55%,rgba(255,230,187,.23),transparent 60%);
+    }
+    .canvas-note { position:absolute;top:14px;left:50%;transform:translateX(-50%);white-space:nowrap;pointer-events:none; }
+    .cake-controls { background:rgba(255,248,236,.93); backdrop-filter:blur(12px); }
+    .celebration-title { text-shadow:0 3px 24px #ffdeb274; }
+    .girl-wrap { width:clamp(105px,15vw,160px); animation:girl-bob 1.7s ease-in-out infinite; transform-origin:bottom center; }
+    .girl-svg { overflow:visible; width:100%; filter:drop-shadow(0 12px 12px rgba(48,24,17,.2)); }
+    .girl-arm-left,.girl-arm-right { transform-box:fill-box; transform-origin:top center; }
+    .girl-arm-left { animation:clap-left .42s ease-in-out infinite alternate; }
+    .girl-arm-right { animation:clap-right .42s ease-in-out infinite alternate; }
+    .girl-eye { animation:blink 4.2s infinite; transform-box:fill-box; transform-origin:center; }
+    .hearts { position:absolute; inset:0; pointer-events:none; }
+    .heart { position:absolute; color:#ffcb78; animation:float-heart 3.5s ease-in-out infinite; opacity:0; }
+    .heart:nth-child(1){left:4%;top:25%;animation-delay:.2s}.heart:nth-child(2){right:4%;top:38%;animation-delay:1s}
+    .heart:nth-child(3){left:23%;top:5%;animation-delay:1.7s}
+    .sparkle { animation:twinkle 1.4s ease-in-out infinite alternate; }
+    .btn-shine { position:relative;overflow:hidden; }
+    .btn-shine::after { content:"";position:absolute;top:-80%;left:-55%;height:260%;width:34%;transform:rotate(28deg);background:#ffffff50;animation:shine 4s ease-in-out infinite; }
+    .float-in { animation:float-in .7s cubic-bezier(.2,.8,.2,1) both; }
+    .knife-hint { animation:knife-nudge 2.2s ease-in-out infinite; }
+    .toast { animation:toast-in .35s ease-out both; }
+    @keyframes twinkle { to { opacity:.42;filter:brightness(1.5); } }
+    @keyframes girl-bob { 0%,100%{transform:translateY(0) rotate(-2deg)}50%{transform:translateY(-12px) rotate(2deg)} }
+    @keyframes clap-left { from{transform:rotate(13deg)}to{transform:rotate(-25deg)} }
+    @keyframes clap-right { from{transform:rotate(-13deg)}to{transform:rotate(25deg)} }
+    @keyframes blink { 0%,45%,48%,100%{transform:scaleY(1)}46.5%{transform:scaleY(.12)} }
+    @keyframes float-heart { 0%{opacity:0;transform:translateY(12px) scale(.5)}20%{opacity:1}80%{opacity:.8}100%{opacity:0;transform:translateY(-48px) scale(1.2)} }
+    @keyframes shine { 0%,70%{left:-55%}100%{left:130%} }
+    @keyframes float-in { from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)} }
+    @keyframes knife-nudge { 0%,100%{transform:translateY(0) rotate(-7deg)}50%{transform:translateY(-7px) rotate(-3deg)} }
+    @keyframes toast-in { from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)} }
+    @media(max-width:767px) {
+      .welcome-room::after { width:150px;height:190px;top:7%; }
+      .welcome-room .welcome-table { height:12%; }
+      .room-picture { width:75px;height:65px;border-width:6px;right:5%; }
+      .window { left:5%; }
+      .fairy-lights { transform:scaleY(.8); }
+      .tabletop { bottom:18%;height:14%; }
+      .table-leg { height:20%; }
+      .cake-frame { height:320px; }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { animation-duration:.01ms !important; animation-iteration-count:1 !important; scroll-behavior:auto !important; }
+    }
+  </style>
+  <script type="importmap">
+    { "imports": {
+      "three": "https://unpkg.com/three@0.165.0/build/three.module.js",
+      "three/addons/": "https://unpkg.com/three@0.165.0/examples/jsm/"
+    } }
+  </script>
+</head>
+<body>
+  <main id="welcomeScreen" class="screen welcome-room flex items-center justify-center px-5 py-12">
+    <div class="welcome-lamp" aria-hidden="true"></div>
+    <div class="welcome-table" aria-hidden="true"></div>
+    <div class="relative z-10 mx-auto w-full max-w-2xl text-center">
+      <div class="mb-7 inline-flex items-center gap-2 rounded-full border border-white/50 bg-white/20 px-4 py-2 text-sm font-semibold tracking-wide text-[#fff6e5] backdrop-blur-md">
+        <span class="sparkle text-lg">✦</span> a little something just for you <span class="sparkle text-lg">✦</span>
+      </div>
+      <section class="welcome-card rounded-[2rem] px-6 py-10 sm:px-12 sm:py-14">
+        <div class="mb-5 text-5xl" aria-hidden="true">🎉</div>
+        <p class="mb-3 text-xs font-bold uppercase tracking-[.3em] text-[#a5574f]">the studying chapter is closed</p>
+        <h1 class="font-display text-4xl font-bold leading-tight tracking-tight text-[#402923] sm:text-6xl">
+          Hi Pranesh,<br><span class="italic text-[#a94152]">I'm so proud of you!!</span>
+        </h1>
+        <p class="mx-auto mt-5 max-w-md text-base leading-relaxed text-[#72564a] sm:text-lg">All those late nights, all that hard work — you did it. This moment is yours. Let’s celebrate!</p>
+        <button id="startButton" class="btn-shine mt-8 rounded-full bg-gradient-to-r from-[#b84856] to-[#d16b5b] px-9 py-4 text-base font-black tracking-[.12em] text-white shadow-[0_12px_30px_rgba(160,60,66,.32)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_18px_36px_rgba(160,60,66,.42)] focus:outline-none focus:ring-4 focus:ring-rose-200 sm:px-12 sm:text-lg">
+          ITS FINALLY OVER <span class="ml-2" aria-hidden="true">🎊</span>
+        </button>
+        <div class="mt-7 text-sm text-[#987b68]">go on, you’ve earned this <span aria-hidden="true">♡</span></div>
+      </section>
+    </div>
+  </main>
+
+  <main id="mainScreen" class="screen celebration-room px-4 pb-8 pt-6 sm:px-8 sm:pt-9" hidden>
+    <div class="room-wall" aria-hidden="true">
+      <div class="window"></div><div class="room-picture"></div>
+      <div class="fairy-lights"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
+    <div class="room-floor" aria-hidden="true"></div>
+    <div class="table-leg left" aria-hidden="true"></div><div class="table-leg right" aria-hidden="true"></div>
+    <div class="tabletop" aria-hidden="true"></div>
+    <div class="main-layout mx-auto max-w-6xl">
+      <header class="float-in mx-auto mb-4 max-w-3xl text-center sm:mb-6">
+        <div class="mb-2 inline-flex items-center gap-2 rounded-full border border-white/25 bg-[#fff1d5]/15 px-4 py-1.5 text-xs font-bold uppercase tracking-[.22em] text-[#fff0d4] backdrop-blur">
+          <span>✦</span> a huge, well-deserved celebration <span>✦</span>
+        </div>
+        <h1 class="celebration-title font-display text-4xl font-black uppercase leading-none tracking-wide text-[#fff0d1] sm:text-6xl">GT APPS OVER!</h1>
+        <p class="mt-2 text-sm font-medium tracking-wide text-[#ffe8cb] sm:text-base">You made it, Pranesh. We’re ridiculously proud of you. <span aria-hidden="true">🥳</span></p>
+      </header>
+      <section class="grid items-end gap-2 md:grid-cols-[1fr_190px] md:gap-4">
+        <div class="relative">
+          <div class="cake-frame rounded-3xl border border-white/15 bg-white/[.055] shadow-[0_26px_80px_rgba(32,18,14,.25)] backdrop-blur-[2px]">
+            <canvas id="cakeCanvas" aria-label="Interactive chocolate cake on a candle-lit table; drag to look around"></canvas>
+            <div class="canvas-note rounded-full border border-white/25 bg-[#39231dcc] px-3 py-1.5 text-[10px] font-semibold tracking-wide text-[#fff0d2] sm:text-xs">drag to admire the cake ✨</div>
+          </div>
+          <div class="hearts" aria-hidden="true"><span class="heart text-xl">♥</span><span class="heart text-2xl">♥</span><span class="heart text-lg">♥</span></div>
+        </div>
+        <aside class="relative mx-auto -mt-5 flex items-end justify-center md:mx-0 md:mt-0">
+          <div class="relative">
+            <div class="absolute -left-9 top-5 text-2xl text-[#ffdc9c] sparkle" aria-hidden="true">✧</div>
+            <div class="absolute -right-7 top-14 text-xl text-[#ffdc9c] sparkle" aria-hidden="true">✦</div>
+            <div class="girl-wrap" role="img" aria-label="A cheerful girl with brown skin and black hair clapping and celebrating">
+              <svg class="girl-svg" viewBox="0 0 180 235" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <ellipse cx="91" cy="222" rx="53" ry="9" fill="#2c1814" opacity=".24"/>
+                <path d="M58 207l-3 13h23l7-13m34 0 5 13h23l-5-15" fill="#342027"/>
+                <path d="M67 144q-29 12-27 54 25 16 80 4l-1-49q-20-16-52-9" fill="#d95f70"/>
+                <path d="M72 181l-4 38m39-38 6 38" stroke="#f3c49c" stroke-width="12" stroke-linecap="round"/>
+                <path d="M53 157q-19 13-15 28m75-28q21 5 26 20" fill="none" stroke="#f3c49c" stroke-width="13" stroke-linecap="round"/>
+                <g class="girl-arm-left"><path d="M54 154q-13-19-19-41" fill="none" stroke="#f3c49c" stroke-width="14" stroke-linecap="round"/><circle cx="34" cy="108" r="9" fill="#f3c49c"/></g>
+                <g class="girl-arm-right"><path d="M121 151q13-18 18-39" fill="none" stroke="#f3c49c" stroke-width="14" stroke-linecap="round"/><circle cx="141" cy="106" r="9" fill="#f3c49c"/></g>
+                <path d="M68 146q21-15 47 0v19H66z" fill="#f7d295"/>
+                <path d="M53 76q-1-48 39-51 45 3 39 63l-8 36H59z" fill="#171414"/>
+                <ellipse cx="91" cy="88" rx="37" ry="43" fill="#9a573d"/>
+                <path d="M54 81q-7-45 34-54 38 0 47 35-17-13-33-12-21 1-29 16l-4 40-10-2z" fill="#171414"/>
+                <path d="M117 57q19 9 15 41l-9 15-2-36z" fill="#171414"/>
+                <path d="M60 84q9-13 23-7m18-1q13-7 22 2" fill="none" stroke="#40241e" stroke-width="4" stroke-linecap="round"/>
+                <ellipse class="girl-eye" cx="75" cy="91" rx="3" ry="4" fill="#281b19"/><ellipse class="girl-eye" cx="109" cy="91" rx="3" ry="4" fill="#281b19"/>
+                <path d="M83 109q9 10 19 0" fill="none" stroke="#6e302e" stroke-width="3.5" stroke-linecap="round"/>
+                <circle cx="66" cy="104" r="6" fill="#cb7967" opacity=".5"/><circle cx="117" cy="104" r="6" fill="#cb7967" opacity=".5"/>
+                <circle cx="58" cy="83" r="6" fill="#d78b57"/><circle cx="125" cy="82" r="6" fill="#d78b57"/>
+                <path d="M51 82q-8 25 4 37m77-40q9 27-3 43" fill="none" stroke="#171414" stroke-width="8" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div class="mt-1 rounded-full border border-white/20 bg-[#482c25]/70 px-3 py-1 text-center text-[10px] font-bold tracking-wide text-[#ffecd0] backdrop-blur">your personal cheer squad!</div>
+          </div>
+        </aside>
+      </section>
+      <section class="cake-controls float-in mx-auto mt-3 flex max-w-3xl flex-col items-center justify-between gap-3 rounded-2xl border border-white/40 p-4 shadow-[0_16px_45px_rgba(39,20,15,.2)] sm:flex-row sm:px-6">
+        <div class="text-center sm:text-left">
+          <p id="statusTitle" class="font-display text-lg font-bold text-[#54352b]">The cake is all yours 🍰</p>
+          <p id="statusMessage" class="text-xs leading-relaxed text-[#8b6e5b] sm:text-sm">Make the first cut — this is the sweetest part.</p>
+        </div>
+        <div class="flex shrink-0 gap-2">
+          <button id="cutButton" class="btn-shine rounded-full bg-[#a64250] px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-rose-900/15 transition hover:-translate-y-0.5 hover:bg-[#903543] focus:outline-none focus:ring-4 focus:ring-rose-200">
+            <span aria-hidden="true">🔪</span> Cut the cake
+          </button>
+          <button id="eatButton" class="hidden rounded-full bg-[#d69a43] px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-amber-900/15 transition hover:-translate-y-0.5 hover:bg-[#bd8131] focus:outline-none focus:ring-4 focus:ring-amber-200">
+            <span aria-hidden="true">🍴</span> Eat a slice
+          </button>
+        </div>
+      </section>
+      <footer class="mt-3 text-center text-xs tracking-wide text-[#f4d8bb]">The hard work is done. The cake is definitely not. <span aria-hidden="true">♡</span></footer>
+    </div>
+    <div id="toast" class="pointer-events-none fixed bottom-5 left-1/2 z-50 hidden -translate-x-1/2 rounded-full border border-white/30 bg-[#3d2821]/90 px-5 py-3 text-sm font-semibold text-white shadow-xl backdrop-blur" role="status" aria-live="polite"></div>
+  </main>
+
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    const welcomeScreen = document.querySelector('#welcomeScreen');
+    const mainScreen = document.querySelector('#mainScreen');
+    const canvas = document.querySelector('#cakeCanvas');
+    const cutButton = document.querySelector('#cutButton');
+    const eatButton = document.querySelector('#eatButton');
+    const statusTitle = document.querySelector('#statusTitle');
+    const statusMessage = document.querySelector('#statusMessage');
+    const toast = document.querySelector('#toast');
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const sliceAngle = Math.PI / 2;
+    const sliceHalfAngle = 0.38;
+    const cakeBaseY = 1.18;
+    const cakeHeight = 1.18;
+    let renderer;
+    let controls;
+    let scene;
+    let camera;
+    let sliceGroup;
+    let knife;
+    let fork;
+    let flame;
+    let animationFrame;
+    let toastTimer;
+    let phase = 'whole';
+    let transitionStart = 0;
+    let activeTransition = '';
+    const clock = new THREE.Clock();
+    const color = (hex, roughness = 0.48, extra = {}) => new THREE.MeshStandardMaterial({ color: hex, roughness, ...extra });
+
+    function confettiBurst(count = 150, spread = 75) {
+      if (typeof window.confetti !== 'function') return;
+      window.confetti({
+        particleCount: count,
+        spread,
+        startVelocity: 42,
+        origin: { x: 0.5, y: 0.56 },
+        colors: ['#ffca70', '#f36c72', '#fff1d6', '#80c6a6', '#9c83db', '#ff8e5b'],
+        disableForReducedMotion: true
+      });
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      toast.classList.add('toast');
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => toast.classList.add('hidden'), 2700);
+    }
+
+    document.querySelector('#startButton').addEventListener('click', () => {
+      welcomeScreen.hidden = true;
+      mainScreen.hidden = false;
+      mainScreen.querySelector('.main-layout').classList.add('float-in');
+      initScene();
+      confettiBurst(230, 100);
+      window.setTimeout(() => confettiBurst(100, 65), 550);
+    });
+
+    function createCakeLayer(radius, height, bottom, material, name) {
+      const start = sliceAngle + sliceHalfAngle;
+      const end = sliceAngle - sliceHalfAngle + Math.PI * 2;
+      const shape = new THREE.Shape();
+      shape.moveTo(radius * Math.cos(start), radius * Math.sin(start));
+      shape.absarc(0, 0, radius, start, end, false);
+      shape.lineTo(0, 0);
+      shape.closePath();
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled: false, curveSegments: 72 });
+      geometry.rotateX(Math.PI / 2);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.y = bottom + height;
+      mesh.name = name;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function createSector(radius, height, material) {
+      const shape = new THREE.Shape();
+      shape.moveTo(0, 0);
+      shape.lineTo(radius * Math.cos(sliceAngle - sliceHalfAngle), radius * Math.sin(sliceAngle - sliceHalfAngle));
+      shape.absarc(0, 0, radius, sliceAngle - sliceHalfAngle, sliceAngle + sliceHalfAngle, false);
+      shape.lineTo(0, 0);
+      const geometry = new THREE.ExtrudeGeometry(shape, { depth: height, bevelEnabled: false, curveSegments: 32 });
+      geometry.rotateX(Math.PI / 2);
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.position.y = cakeBaseY + height;
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      return mesh;
+    }
+
+    function addCakeDetails() {
+      const chocolate = color('#50251e', 0.31);
+      const filling = color('#f3c783', 0.55);
+      const ganache = color('#341917', 0.2, { metalness: 0.04 });
+      const piping = color('#f4cf91', 0.38);
+      scene.add(createCakeLayer(1.27, 0.53, cakeBaseY, chocolate, 'bottom-cake-layer'));
+      scene.add(createCakeLayer(1.28, 0.09, cakeBaseY + 0.53, filling, 'middle-filling'));
+      scene.add(createCakeLayer(1.27, 0.49, cakeBaseY + 0.62, chocolate, 'top-cake-layer'));
+      scene.add(createCakeLayer(1.29, 0.10, cakeBaseY + 1.11, ganache, 'ganache-top'));
+      scene.add(createCakeLayer(1.295, 0.035, cakeBaseY + 0.51, color('#e9b973', 0.37), 'filling-edge'));
+      scene.add(createCakeLayer(1.295, 0.035, cakeBaseY + 1.075, color('#e9b973', 0.37), 'filling-edge-upper'));
+
+      const dripMaterial = ganache;
+      for (let i = 0; i < 13; i++) {
+        const angle = (i / 13) * Math.PI * 2 + 0.12;
+        const radius = 1.276;
+        const dripHeight = 0.10 + (i % 4) * 0.045;
+        const drip = new THREE.Mesh(new THREE.SphereGeometry(0.085, 18, 14), dripMaterial);
+        drip.scale.set(0.7, 1.05 + (i % 2) * 0.15, 0.48);
+        drip.position.set(Math.cos(angle) * radius, cakeBaseY + 1.15 - dripHeight * 0.42, Math.sin(angle) * radius);
+        drip.castShadow = true;
+        scene.add(drip);
+      }
+
+      for (let i = 0; i < 12; i++) {
+        const angle = (i / 12) * Math.PI * 2;
+        const rosette = new THREE.Mesh(new THREE.TorusKnotGeometry(0.095, 0.026, 48, 8, 2, 3), piping);
+        rosette.position.set(Math.cos(angle) * 1.04, cakeBaseY + 1.245, Math.sin(angle) * 1.04);
+        rosette.rotation.x = Math.PI / 2;
+        rosette.castShadow = true;
+        scene.add(rosette);
+      }
+
+      const berryMat = color('#a92f3a', 0.28);
+      const berryLeaf = color('#426b3c', 0.58);
+      for (let i = 0; i < 5; i++) {
+        const angle = i * (Math.PI * 2 / 5) + 0.1;
+        const berry = new THREE.Mesh(new THREE.SphereGeometry(0.13, 20, 16), berryMat);
+        berry.scale.set(0.8, 1.2, 0.8);
+        berry.position.set(Math.cos(angle) * 0.51, cakeBaseY + 1.32, Math.sin(angle) * 0.51);
+        berry.castShadow = true;
+        scene.add(berry);
+        const leaf = new THREE.Mesh(new THREE.ConeGeometry(0.055, 0.15, 5), berryLeaf);
+        leaf.position.set(berry.position.x, berry.position.y + 0.13, berry.position.z);
+        scene.add(leaf);
+      }
+    }
+
+    function addRoomAndTable() {
+      const wood = color('#805035', 0.6);
+      const trim = color('#bd8756', 0.52);
+      const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), color('#59382c', 0.79));
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.y = 0.02;
+      floor.receiveShadow = true;
+      scene.add(floor);
+      const wall = new THREE.Mesh(new THREE.PlaneGeometry(18, 9), color('#805d51', 0.87));
+      wall.position.set(0, 4.25, -4.1);
+      wall.receiveShadow = true;
+      scene.add(wall);
+      for (let x = -7; x <= 7; x += 2.2) {
+        const panel = new THREE.Mesh(new THREE.BoxGeometry(0.035, 8.1, 0.06), color('#b78b72', 0.8));
+        panel.position.set(x, 4.15, -4.04);
+        scene.add(panel);
+      }
+      const top = new THREE.Mesh(new THREE.CylinderGeometry(3.35, 3.05, 0.22, 96), wood);
+      top.position.y = 1.02;
+      top.castShadow = true;
+      top.receiveShadow = true;
+      scene.add(top);
+      const rim = new THREE.Mesh(new THREE.TorusGeometry(3.14, 0.075, 10, 96), trim);
+      rim.rotation.x = Math.PI / 2;
+      rim.position.y = 0.92;
+      scene.add(rim);
+      for (const x of [-1.85, 1.85]) {
+        const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.24, 1, 16), wood);
+        leg.position.set(x, 0.49, 0.28);
+        leg.castShadow = true;
+        scene.add(leg);
+      }
+
+      const plate = new THREE.Mesh(new THREE.CylinderGeometry(1.65, 1.58, 0.12, 80), color('#fff0d8', 0.24));
+      plate.position.set(0, 1.19, 0);
+      plate.castShadow = true;
+      plate.receiveShadow = true;
+      scene.add(plate);
+      const plateRim = new THREE.Mesh(new THREE.TorusGeometry(1.53, 0.035, 8, 80), color('#d7aa71', 0.3, { metalness: 0.18 }));
+      plateRim.rotation.x = Math.PI / 2;
+      plateRim.position.y = 1.255;
+      scene.add(plateRim);
+    }
+
+    function addCandle() {
+      const candle = new THREE.Mesh(new THREE.CylinderGeometry(0.055, 0.06, 0.46, 24), color('#fff0cc', 0.34));
+      candle.position.set(-0.34, cakeBaseY + 1.43, -0.15);
+      candle.castShadow = true;
+      scene.add(candle);
+      const stripe = new THREE.Mesh(new THREE.CylinderGeometry(0.059, 0.06, 0.09, 24), color('#db6470', 0.32));
+      stripe.position.set(-0.34, candle.position.y - 0.03, -0.15);
+      scene.add(stripe);
+      const wick = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.012, 0.075, 8), color('#39241d'));
+      wick.position.set(-0.34, candle.position.y + 0.25, -0.15);
+      scene.add(wick);
+      flame = new THREE.Mesh(new THREE.SphereGeometry(0.07, 18, 16), new THREE.MeshBasicMaterial({ color: '#ffb53c' }));
+      flame.scale.set(0.72, 1.7, 0.72);
+      flame.position.set(-0.34, candle.position.y + 0.34, -0.15);
+      scene.add(flame);
+      const glow = new THREE.PointLight('#ffc65e', 1.2, 3.4);
+      glow.position.copy(flame.position);
+      scene.add(glow);
+    }
+
+    function addKnife() {
+      knife = new THREE.Group();
+      const blade = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.68, 0.035), new THREE.MeshStandardMaterial({ color: '#d4d9db', metalness: 0.82, roughness: 0.2 }));
+      blade.position.y = -0.29;
+      knife.add(blade);
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.085, 0.47, 12), color('#583426', 0.4));
+      handle.position.y = 0.27;
+      knife.add(handle);
+      knife.position.set(2.0, 3.25, 0.85);
+      knife.rotation.z = -0.55;
+      knife.rotation.x = -0.18;
+      knife.visible = true;
+      scene.add(knife);
+    }
+
+    function addSlice() {
+      sliceGroup = new THREE.Group();
+      const cocoa = color('#51261f', 0.42);
+      const cream = color('#f1c47d', 0.48);
+      const top = color('#351916', 0.22, { metalness: 0.03 });
+      sliceGroup.add(createSector(1.27, 0.53, cocoa));
+      const middle = createSector(1.28, 0.09, cream);
+      middle.position.y = cakeBaseY + 0.62;
+      sliceGroup.add(middle);
+      const upper = createSector(1.27, 0.49, cocoa);
+      upper.position.y = cakeBaseY + 1.11;
+      sliceGroup.add(upper);
+      const ganachePiece = createSector(1.29, 0.10, top);
+      ganachePiece.position.y = cakeBaseY + 1.21;
+      sliceGroup.add(ganachePiece);
+      const pipingDot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), color('#f4cf91', 0.38));
+      pipingDot.position.set(0.49, cakeBaseY + 1.32, 0);
+      sliceGroup.add(pipingDot);
+      sliceGroup.position.set(0, 0, 0.02);
+      sliceGroup.visible = true;
+      sliceGroup.traverse(child => { if (child.isMesh) { child.castShadow = true; child.receiveShadow = true; } });
+      scene.add(sliceGroup);
+    }
+
+    function addFork() {
+      fork = new THREE.Group();
+      const metal = new THREE.MeshStandardMaterial({ color: '#e1d9ca', metalness: 0.86, roughness: 0.18 });
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.035, 0.045, 0.74, 10), color('#8b613f', 0.35));
+      handle.position.y = -0.24;
+      fork.add(handle);
+      const neck = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.22, 0.045), metal);
+      neck.position.y = 0.17;
+      fork.add(neck);
+      for (let i = 0; i < 4; i++) {
+        const tine = new THREE.Mesh(new THREE.CylinderGeometry(0.012, 0.007, 0.25, 7), metal);
+        tine.position.set((i - 1.5) * 0.045, 0.37, 0);
+        fork.add(tine);
+      }
+      fork.position.set(2.15, 1.8, 1.25);
+      fork.rotation.z = -0.9;
+      fork.visible = false;
+      scene.add(fork);
+    }
+
+    function initScene() {
+      if (renderer) {
+        resizeRenderer();
+        return;
+      }
+      const width = canvas.clientWidth || 600;
+      const height = canvas.clientHeight || 440;
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color('#73574d');
+      scene.fog = new THREE.Fog('#73574d', 10, 24);
+      camera = new THREE.PerspectiveCamera(35, width / height, 0.1, 60);
+      camera.position.set(5.8, 5.4, 7.2);
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      renderer.setSize(width, height, false);
+      renderer.shadowMap.enabled = true;
+      renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      controls = new OrbitControls(camera, renderer.domElement);
+      controls.target.set(0, 1.72, 0);
+      controls.enableDamping = true;
+      controls.dampingFactor = 0.06;
+      controls.minDistance = 5;
+      controls.maxDistance = 11;
+      controls.maxPolarAngle = Math.PI * 0.49;
+      controls.minPolarAngle = 0.35;
+      controls.enablePan = false;
+      scene.add(new THREE.HemisphereLight('#ffe3bb', '#50372f', 2.15));
+      const key = new THREE.DirectionalLight('#fff0d2', 3.2);
+      key.position.set(-4, 8, 5);
+      key.castShadow = true;
+      key.shadow.mapSize.set(1024, 1024);
+      key.shadow.camera.left = -5;
+      key.shadow.camera.right = 5;
+      key.shadow.camera.top = 6;
+      key.shadow.camera.bottom = -4;
+      scene.add(key);
+      const fill = new THREE.PointLight('#f39b78', 58, 12);
+      fill.position.set(4.5, 4.2, 2.5);
+      scene.add(fill);
+      addRoomAndTable();
+      addCakeDetails();
+      addCandle();
+      addKnife();
+      addSlice();
+      addFork();
+      if ('ResizeObserver' in window) new ResizeObserver(resizeRenderer).observe(canvas.parentElement);
+      else window.addEventListener('resize', resizeRenderer);
+      window.addEventListener('pagehide', () => window.cancelAnimationFrame(animationFrame), { once: true });
+      animate();
+    }
+
+    function resizeRenderer() {
+      if (!renderer || !camera) return;
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      if (!width || !height) return;
+      renderer.setSize(width, height, false);
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+
+    function animate() {
+      animationFrame = window.requestAnimationFrame(animate);
+      const elapsed = clock.getElapsedTime();
+      if (flame) {
+        flame.scale.y = 1.65 + Math.sin(elapsed * 11) * 0.2;
+        flame.rotation.z = Math.sin(elapsed * 8) * 0.12;
+      }
+      if (knife && phase === 'whole') knife.position.y = 3.25 + Math.sin(elapsed * 2.2) * 0.045;
+      if (activeTransition) updateTransition();
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    function updateTransition() {
+      const progress = Math.min((performance.now() - transitionStart) / (reducedMotion ? 10 : 760), 1);
+      const eased = progress < 0.5 ? 4 * progress * progress * progress : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+      if (activeTransition === 'cut') {
+        knife.visible = true;
+        knife.position.y = THREE.MathUtils.lerp(3.2, 2.25, eased);
+        knife.rotation.z = THREE.MathUtils.lerp(-0.55, -0.02, eased);
+        knife.rotation.x = THREE.MathUtils.lerp(-0.18, 0, eased);
+        sliceGroup.visible = true;
+        sliceGroup.position.z = THREE.MathUtils.lerp(0.02, 0.48, eased);
+        sliceGroup.position.y = Math.sin(eased * Math.PI) * 0.14;
+      } else if (activeTransition === 'eat') {
+        fork.visible = true;
+        fork.position.x = THREE.MathUtils.lerp(2.15, 0.2, eased);
+        fork.position.y = THREE.MathUtils.lerp(1.8, 3.9, eased);
+        fork.position.z = THREE.MathUtils.lerp(1.25, 1.2, eased);
+        fork.rotation.z = THREE.MathUtils.lerp(-0.9, 0.25, eased);
+        sliceGroup.position.y = THREE.MathUtils.lerp(0, 2.1, eased);
+        sliceGroup.scale.setScalar(1 - eased * 0.78);
+      }
+      if (progress >= 1) finishTransition();
+    }
+
+    function finishTransition() {
+      const completed = activeTransition;
+      activeTransition = '';
+      if (completed === 'cut') {
+        phase = 'cut';
+        knife.visible = false;
+        eatButton.classList.remove('hidden');
+        statusTitle.textContent = 'A slice just for you! 🍰';
+        statusMessage.textContent = 'The best part of all that hard work: the cake.';
+        showToast('Cake officially cut. Someone grab a fork! 🎉');
+        confettiBurst(105, 65);
+      } else {
+        phase = 'eaten';
+        fork.visible = false;
+        sliceGroup.visible = false;
+        eatButton.classList.add('hidden');
+        statusTitle.textContent = 'Not a crumb left! ✨';
+        statusMessage.textContent = 'You earned every last bite. Proud of you, Pranesh!';
+        showToast('A perfect ending to a very sweet victory! 🥳');
+        confettiBurst(190, 95);
+        window.setTimeout(() => confettiBurst(95, 60), 450);
+      }
+      cutButton.disabled = phase !== 'whole';
+    }
+
+    cutButton.addEventListener('click', () => {
+      if (phase !== 'whole' || activeTransition) return;
+      phase = 'cutting';
+      activeTransition = 'cut';
+      transitionStart = performance.now();
+      cutButton.disabled = true;
+      statusTitle.textContent = 'One very important cut... 🔪';
+      statusMessage.textContent = 'The celebratory slice is on its way!';
+    });
+
+    eatButton.addEventListener('click', () => {
+      if (phase !== 'cut' || activeTransition) return;
+      phase = 'eating';
+      activeTransition = 'eat';
+      transitionStart = performance.now();
+      eatButton.disabled = true;
+      statusTitle.textContent = 'Incoming fork! 🍴';
+      statusMessage.textContent = 'Goodbye, delicious chocolate slice.';
+    });
+
+  </script>
+</body>
+</html>
