@@ -341,6 +341,9 @@
           <p id="statusTitle" class="font-display text-lg font-bold text-[#54352b]">The cake is all yours 🍰</p>
           <p id="statusMessage" class="text-xs leading-relaxed text-[#8b6e5b] sm:text-sm">Start the cut, then follow the glowing guide with your knife.</p>
           <div id="cutProgress" class="guide-progress mt-2 hidden w-full max-w-xs" role="progressbar" aria-label="Cake cutting progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span></span></div>
+          <p id="celebrationComplete" class="mt-2 hidden inline-flex items-center gap-2 rounded-full bg-[#e7f2df] px-4 py-2 text-sm font-bold text-[#466943]" role="status" aria-live="polite">
+            <span aria-hidden="true">✓</span> Celebration complete!
+          </p>
         </div>
         <div class="flex shrink-0 gap-2">
           <button id="cutButton" class="btn-shine rounded-full bg-[#a64250] px-5 py-3 text-sm font-extrabold text-white shadow-lg shadow-rose-900/15 transition hover:-translate-y-0.5 hover:bg-[#903543] focus:outline-none focus:ring-4 focus:ring-rose-200">
@@ -1175,6 +1178,10 @@
           canvas.classList.remove('slice-clickable');
           statusTitle.textContent = 'Not a crumb left! ✨';
           statusMessage.textContent = 'You earned every last bite. I’m so proud of you, Pranesh!';
+          serveButton.classList.add('hidden');
+          serveButton.disabled = true;
+          biteButton.classList.add('hidden');
+          document.querySelector('#celebrationComplete').classList.remove('hidden');
           showToast('Three perfect bites. A very sweet victory!');
           confettiBurst(190, 95);
           window.setTimeout(() => confettiBurst(95, 60), 450);

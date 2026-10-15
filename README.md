@@ -13,7 +13,7 @@ Open `index.html` in a modern browser with an internet connection.
 3. Select the `main` branch and the `/ (root)` folder, then save.
 4. Open the Pages URL shown on that settings page once deployment finishes.
 
-The flow is welcome, watch the three college goals get checked off, open the letter to reveal the video, continue to the cake, move the cursor along the glowing guide to cut, serve the separated slice, and click the slice for three bites. The photo frame rotates through the supplied photos every three seconds.
+The flow is welcome, watch the three college goals get checked off, open the letter to reveal the video, continue to the cake, move the cursor along the glowing guide to cut, serve the separated slice, and click the slice for three bites. The serving controls disappear after the final bite and a completion indicator appears. The photo frame rotates through the supplied photos every three seconds.
 
 The optional reaction recorder asks for explicit screen, camera, and microphone permissions. It displays a camera picture-in-picture and saves the combined screen recording locally as a WebM or MP4 file. It does not upload recordings. Screen recording requires a secure context and browser support for screen capture and MediaRecorder.
 
