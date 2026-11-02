@@ -590,7 +590,6 @@
       feedSlice.scale.setScalar(0.72);
       feedSlice.visible = true;
       scene.add(feedSlice);
-      sourceSlice.visible = false;
       fork.visible = true;
 
       const started = performance.now();
@@ -608,13 +607,13 @@
         } else if (progress < 0.78) {
           const phase = (progress - 0.48) / 0.30;
           const eased = phase * phase * (3 - 2 * phase);
-          position = new THREE.Vector3().lerpVectors(new THREE.Vector3(0.05, 2.1, 2.15), new THREE.Vector3(1.55, 2.8, 4.25), eased);
-          feedScale = 0.90 + eased * 0.85;
+          position = new THREE.Vector3().lerpVectors(new THREE.Vector3(0.05, 2.1, 2.15), new THREE.Vector3(4.35, 3.05, 3.15), eased);
+          feedScale = 0.90 + eased * 0.15;
           fork.rotation.set(-0.65 + eased * 0.25, 0, -0.18 + eased * 0.38);
         } else {
           const phase = (progress - 0.78) / 0.22;
-          position = new THREE.Vector3(1.55 - phase * 0.15, 2.8 + Math.sin(phase * Math.PI) * 0.22, 4.25);
-          feedScale = 1.75 * (1 - phase * 0.82);
+          position = new THREE.Vector3(4.35 + phase * 0.75, 3.05 + Math.sin(phase * Math.PI) * 0.18, 3.15);
+          feedScale = 1.05 * (1 - phase * 0.95);
           fork.rotation.set(-0.40, 0, 0.20);
           memoryPhoto.style.transform = `scale(${1 + Math.sin(phase * Math.PI) * 0.14}) rotate(-2deg)`;
         }
