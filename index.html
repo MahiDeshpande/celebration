@@ -577,24 +577,65 @@
     }
 
     feedMeButton.addEventListener('click', () => {
+      if (feedMeButton.disabled || !sliceParts.length) return;
+      feedMeButton.disabled = true;
       memoryPhoto.classList.remove('feed-me');
       void memoryPhoto.offsetWidth;
       memoryPhoto.classList.add('feed-me');
       playNumNumSound();
-      if (fork) {
-        fork.visible = true;
-        const started = performance.now();
-        const animateFork = now => {
-          const progress = Math.min((now - started) / 900, 1);
-          fork.position.set(3.0 - progress * 3.4, 2.3 + Math.sin(progress * Math.PI) * 0.55, 1.1);
-          fork.rotation.set(-0.25, 0, Math.PI - progress * 0.8);
-          if (progress < 1) window.requestAnimationFrame(animateFork);
-          else window.setTimeout(() => { fork.visible = false; }, 650);
-        };
-        window.requestAnimationFrame(animateFork);
-      }
+
+      const existingFeedSlice = scene.getObjectByName('feedMeSlice');
+      if (existingFeedSlice) scene.remove(existingFeedSlice);
+      const feedSlice = sliceParts[0].clone();
+      feedSlice.name = 'feedMeSlice';
+      feedSlice.position.set(0, 0.1, 0.15);
+      feedSlice.scale.setScalar(0.72);
+      feedSlice.visible = true;
+      feedSlice.traverse(child => { if (child.isMesh) { child.castShadow = true; child.receiveShadow = true; } });
+      scene.add(feedSlice);
+      fork.visible = true;
+
+      const started = performance.now();
+      const duration = reducedMotion ? 700 : 2600;
+      const animateFork = now => {
+        const progress = Math.min((now - started) / duration, 1);
+        let position;
+        let feedScale;
+        if (progress < 0.48) {
+          const phase = progress / 0.48;
+          const eased = phase * phase * (3 - 2 * phase);
+          position = new THREE.Vector3().lerpVectors(new THREE.Vector3(0.05, 2.35, 0.1), new THREE.Vector3(0.05, 2.1, 2.15), eased);
+          feedScale = 0.72 + eased * 0.18;
+          fork.rotation.set(-0.65 * eased, 0, -0.18);
+        } else if (progress < 0.78) {
+          const phase = (progress - 0.48) / 0.30;
+          const eased = phase * phase * (3 - 2 * phase);
+          position = new THREE.Vector3().lerpVectors(new THREE.Vector3(0.05, 2.1, 2.15), new THREE.Vector3(1.55, 2.8, 4.25), eased);
+          feedScale = 0.90 + eased * 0.85;
+          fork.rotation.set(-0.65 + eased * 0.25, 0, -0.18 + eased * 0.38);
+        } else {
+          const phase = (progress - 0.78) / 0.22;
+          position = new THREE.Vector3(1.55 - phase * 0.15, 2.8 + Math.sin(phase * Math.PI) * 0.22, 4.25);
+          feedScale = 1.75 * (1 - phase * 0.82);
+          fork.rotation.set(-0.40, 0, 0.20);
+          memoryPhoto.style.transform = `scale(${1 + Math.sin(phase * Math.PI) * 0.14}) rotate(-2deg)`;
+        }
+        fork.position.copy(position);
+        feedSlice.position.copy(position).add(new THREE.Vector3(0, -0.48, 0));
+        feedSlice.scale.setScalar(feedScale);
+        feedSlice.rotation.set(0, 0, -0.18);
+        if (progress < 1) window.requestAnimationFrame(animateFork);
+        else {
+          fork.visible = false;
+          feedSlice.visible = false;
+          memoryPhoto.style.transform = '';
+          feedMeButton.disabled = false;
+          showToast('Num num num... the whole triple-layer slice reached me! 😋');
+        }
+      };
+      window.requestAnimationFrame(animateFork);
       window.setTimeout(() => memoryPhoto.classList.remove('feed-me'), 2300);
-      showToast('Num num num... coming right to you! 😋');
+      showToast('A fresh triple-layer slice is coming toward you! 😋');
     });
 
     function setRecordingStatus(message) {
