@@ -117,6 +117,8 @@
       box-shadow:0 18px 45px #2b171a66;transition:opacity .45s ease,transform .55s ease;
     }
     .photo-frame.changing { opacity:0;transform:scale(.95) rotate(-2deg); }
+    .memory-photo.feed-me { animation:feed-me-photo .7s ease-in-out 3; box-shadow:0 0 0 8px rgba(255,203,5,.28),0 22px 55px rgba(43,12,16,.7); }
+    @keyframes feed-me-photo { 0%,100%{transform:scale(1)} 50%{transform:scale(1.24) rotate(-2deg)} }
     .guide-progress { height:5px;overflow:hidden;border-radius:999px;background:#e5d3c5; }
     .guide-progress > span { display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#d35f70,#e2a253);transition:width .1s linear; }
     .interactive-cake { cursor:grab; }
@@ -124,7 +126,7 @@
     .slice-clickable { cursor:pointer; }
     .celebration-room {
       position: relative; isolation: isolate; min-height: 100svh; overflow: hidden;
-      background: linear-gradient(180deg,#593c38 0%,#876254 48%,#614234 48.2%,#352521 100%);
+      background: linear-gradient(180deg,#7a1723 0%,#b52d35 48%,#7e2229 48.2%,#351318 100%);
     }
     .room-wall { position:absolute; inset:0 0 44% 0; z-index:-2; overflow:hidden; }
     .window {
@@ -243,38 +245,14 @@
       <h1 class="font-display text-3xl font-bold text-[#402923] sm:text-5xl">Look how far you’ve come</h1>
       <p class="mt-3 text-sm leading-relaxed text-[#806458]">One by one, every college on your list became a real accomplishment.</p>
       <ul id="collegeList" class="mx-auto my-8 max-w-lg space-y-3 text-left" aria-label="Completed college goals">
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="0">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">CMU</span>
-        </li>
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="1">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">UIUC</span>
-        </li>
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="2">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">Georgia Tech</span>
-        </li>
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="3">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">University of Georgia</span>
-        </li>
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="4">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">UT Austin</span>
-        </li>
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="5">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">Purdue</span>
-        </li>
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="6">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">UGA Honors</span>
-        </li>
-        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4" data-college="7">
-          <span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0" aria-hidden="true">✓</span>
-          <span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">University of Michigan</span>
-        </li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">Purdue</span></li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">UGA Honors</span></li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">University of Michigan</span></li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">CMU</span></li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">UIUC</span></li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">Georgia Tech</span></li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">University of Georgia</span></li>
+        <li class="college-row flex items-center gap-4 rounded-2xl border border-[#ead7c3] bg-white/70 px-5 py-4"><span class="college-check grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#a64250] text-xl font-black text-white opacity-0">✓</span><span class="college-name font-display text-lg font-bold text-[#54352b] sm:text-xl">UT Austin</span></li>
       </ul>
       <p class="mb-5 text-sm font-semibold text-[#8b6e5b]">I’m so proud of you for every step that got you here. ♡</p>
       <div class="flex flex-col items-center gap-3">
@@ -354,6 +332,7 @@
           <figure class="relative">
             <span class="absolute -left-6 top-3 text-2xl text-[#ffdc9c] sparkle" aria-hidden="true">✧</span>
             <span class="absolute -right-6 top-10 text-xl text-[#ffdc9c] sparkle" aria-hidden="true">✦</span>
+            <button id="feedMeButton" type="button" class="absolute -top-9 left-1/2 z-20 -translate-x-1/2 whitespace-nowrap rounded-full bg-[#ffcb05] px-4 py-2 text-sm font-black text-[#00274c] shadow-lg transition hover:scale-105 focus:outline-none focus:ring-4 focus:ring-yellow-200">FEED ME 🍴</button>
             <img id="memoryPhoto" class="photo-frame" src="assets/WhatsApp Image 2026-11-01 at 10.39.31 PM.jpeg" alt="A favorite photo, 1 of 11" width="190" height="235">
             <figcaption id="memoryCaption" class="mt-2 max-w-[205px] text-center text-xs font-bold leading-relaxed tracking-wide text-[#ffecd0]">I’ll always be here to cheer you for your big moments ♡</figcaption>
           </figure>
@@ -407,6 +386,7 @@
     const recordingTimer = document.querySelector('#recordingTimer');
     const stopRecordingButton = document.querySelector('#stopRecordingButton');
     const memoryPhoto = document.querySelector('#memoryPhoto');
+    const feedMeButton = document.querySelector('#feedMeButton');
     const cutButton = document.querySelector('#cutButton');
     const serveButton = document.querySelector('#serveButton');
     const biteButton = document.querySelector('#biteButton');
@@ -420,7 +400,7 @@
     const sliceAngle = Math.PI / 2;
     const sliceHalfAngle = 0.38;
     const cakeBaseY = 1.18;
-    const cakeTopY = cakeBaseY + 1.23;
+    const cakeTopY = 2.82;
     const servePosition = new THREE.Vector3(2.2, 0.513, 1.05);
     const serveScale = 0.58;
     const photoPaths = [
@@ -470,6 +450,8 @@
     let recordingStartedAt = 0;
     let recordingFinishing = false;
     let activeCake = 'PURDUE';
+    let cutLayerIndex = 0;
+    const cutLayers = ['PURDUE', 'MICHIGAN', 'UGA HONORS'];
     const cakeThemes = {
       PURDUE: { cake: '#111111', filling: '#cfb53b', ganache: '#8a8d8f', piping: '#cfb53b', berry: '#111111', room: '#fff0d2' },
       'UGA HONORS': { cake: '#ba0c2f', filling: '#ffffff', ganache: '#111111', piping: '#ffffff', berry: '#ba0c2f', room: '#fff0d2' },
@@ -514,6 +496,7 @@
       letterScreen.hidden = true;
       mainScreen.hidden = false;
       mainScreen.querySelector('.main-layout').classList.add('float-in');
+      cutLayerIndex = 0;
       initScene();
       startPhotoCarousel();
       confettiBurst(230, 100);
@@ -581,6 +564,38 @@
         }, reducedMotion ? 0 : 400);
       }, 3000);
     }
+
+    function playNumNumSound() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const speech = new SpeechSynthesisUtterance('num num num num num');
+        speech.rate = 1.15;
+        speech.pitch = 1.6;
+        speech.volume = 0.9;
+        window.speechSynthesis.speak(speech);
+      }
+    }
+
+    feedMeButton.addEventListener('click', () => {
+      memoryPhoto.classList.remove('feed-me');
+      void memoryPhoto.offsetWidth;
+      memoryPhoto.classList.add('feed-me');
+      playNumNumSound();
+      if (fork) {
+        fork.visible = true;
+        const started = performance.now();
+        const animateFork = now => {
+          const progress = Math.min((now - started) / 900, 1);
+          fork.position.set(3.0 - progress * 3.4, 2.3 + Math.sin(progress * Math.PI) * 0.55, 1.1);
+          fork.rotation.set(-0.25, 0, Math.PI - progress * 0.8);
+          if (progress < 1) window.requestAnimationFrame(animateFork);
+          else window.setTimeout(() => { fork.visible = false; }, 650);
+        };
+        window.requestAnimationFrame(animateFork);
+      }
+      window.setTimeout(() => memoryPhoto.classList.remove('feed-me'), 2300);
+      showToast('Num num num... coming right to you! 😋');
+    });
 
     function setRecordingStatus(message) {
       recordingStatus.textContent = message;
@@ -794,22 +809,33 @@
       cutCakeGroup = new THREE.Group();
       scene.add(wholeCakeGroup, cutCakeGroup);
       cutCakeGroup.visible = false;
-      const theme = cakeThemes[activeCake];
-      const chocolate = color(theme.cake, 0.31);
-      const filling = color(theme.filling, 0.55);
-      const ganache = color(theme.ganache, 0.2, { metalness: 0.04 });
-      const piping = color(theme.piping, 0.38);
-      const schoolLabel = createCakeText(activeCake, activeCake === 'PURDUE' ? '#cfb53b' : '#ffffff', activeCake === 'PURDUE' ? '#111111' : theme.ganache);
-      schoolLabel.position.set(0, cakeTopY + 0.48, 0);
-      scene.add(schoolLabel);
-      addCakeLayer(1.27, 0.53, cakeBaseY, chocolate, 'bottom-cake-layer');
-      addCakeLayer(1.28, 0.09, cakeBaseY + 0.53, filling, 'middle-filling');
-      addCakeLayer(1.27, 0.49, cakeBaseY + 0.62, chocolate, 'top-cake-layer');
-      addCakeLayer(1.29, 0.10, cakeBaseY + 1.11, ganache, 'ganache-top');
-      addCakeLayer(1.295, 0.035, cakeBaseY + 0.51, color('#e9b973', 0.37), 'filling-edge');
-      addCakeLayer(1.295, 0.035, cakeBaseY + 1.075, color('#e9b973', 0.37), 'filling-edge-upper');
+      const purdue = color('#111111', 0.31);
+      const purdueGold = color('#cfb53b', 0.42);
+      const michigan = color('#00274c', 0.31);
+      const maize = color('#ffcb05', 0.42);
+      const uga = color('#ba0c2f', 0.31);
+      const ugaWhite = color('#ffffff', 0.38);
+      addCakeLayer(1.27, 0.53, cakeBaseY, purdue, 'purdue-bottom-tier');
+      addCakeLayer(1.28, 0.09, cakeBaseY + 0.53, purdueGold, 'purdue-gold-filling');
+      addCakeLayer(1.08, 0.49, cakeBaseY + 0.62, michigan, 'michigan-center-tier');
+      addCakeLayer(1.09, 0.09, cakeBaseY + 1.11, maize, 'michigan-maize-filling');
+      addCakeLayer(0.89, 0.34, cakeBaseY + 1.20, uga, 'uga-honors-top-tier');
+      addCakeLayer(0.91, 0.10, cakeBaseY + 1.54, ugaWhite, 'uga-white-icing');
+      const purdueLabel = createCakeText('PURDUE', '#cfb53b', '#111111');
+      purdueLabel.scale.set(1.55, 0.67, 1);
+      purdueLabel.position.set(0, 1.48, 1.12);
+      scene.add(purdueLabel);
+      const michiganLabel = createCakeText('MICHIGAN', '#ffcb05', '#00274c', '〽 WOLVERINE');
+      michiganLabel.scale.set(1.55, 0.67, 1);
+      michiganLabel.position.set(0, 2.03, 0.95);
+      scene.add(michiganLabel);
+      const ugaLabel = createCakeText('UGA HONORS', '#ffffff', '#ba0c2f');
+      ugaLabel.scale.set(1.35, 0.58, 1);
+      ugaLabel.position.set(0, 2.72, 0.78);
+      scene.add(ugaLabel);
 
-      const dripMaterial = ganache;
+      const dripMaterial = color('#8a8d8f', 0.22);
+      const piping = color('#cfb53b', 0.38);
       for (let i = 0; i < 13; i++) {
         const angle = (i / 13) * Math.PI * 2 + 0.12;
         const radius = 1.276;
@@ -834,7 +860,7 @@
         if (angleIsInSlice(angle)) cakeDetails.push(rosette);
       }
 
-      const berryMat = color(theme.berry, 0.28);
+      const berryMat = color('#ba0c2f', 0.28);
       const berryLeaf = color('#426b3c', 0.58);
       for (let i = 0; i < 5; i++) {
         const angle = i * (Math.PI * 2 / 5) + 0.1;
@@ -969,23 +995,32 @@
 
     function addSlice() {
       sliceGroup = new THREE.Group();
-      const cocoa = color('#51261f', 0.42);
-      const cream = color('#f1c47d', 0.48);
-      const top = color('#351916', 0.22, { metalness: 0.03 });
+      const purdue = color('#111111', 0.42);
+      const purdueGold = color('#cfb53b', 0.48);
+      const michigan = color('#00274c', 0.42);
+      const maize = color('#ffcb05', 0.48);
+      const uga = color('#ba0c2f', 0.42);
+      const ugaWhite = color('#ffffff', 0.38);
       for (let i = 0; i < 3; i++) {
         const portion = new THREE.Group();
         const startAngle = sliceAngle - sliceHalfAngle + (sliceHalfAngle * 2 * i / 3);
         const endAngle = sliceAngle - sliceHalfAngle + (sliceHalfAngle * 2 * (i + 1) / 3);
-        portion.add(createSector(1.27, 0.53, cocoa, startAngle, endAngle));
-        const middle = createSector(1.28, 0.09, cream, startAngle, endAngle);
-        middle.position.y = cakeBaseY + 0.62;
-        portion.add(middle);
-        const upper = createSector(1.27, 0.49, cocoa, startAngle, endAngle);
-        upper.position.y = cakeBaseY + 1.11;
-        portion.add(upper);
-        const ganachePiece = createSector(1.29, 0.10, top, startAngle, endAngle);
-        ganachePiece.position.y = cakeBaseY + 1.21;
-        portion.add(ganachePiece);
+        portion.add(createSector(1.27, 0.53, purdue, startAngle, endAngle));
+        const gold = createSector(1.28, 0.09, purdueGold, startAngle, endAngle);
+        gold.position.y = cakeBaseY + 0.62;
+        portion.add(gold);
+        const center = createSector(1.08, 0.49, michigan, startAngle, endAngle);
+        center.position.y = cakeBaseY + 0.62;
+        portion.add(center);
+        const yellow = createSector(1.09, 0.09, maize, startAngle, endAngle);
+        yellow.position.y = cakeBaseY + 1.11;
+        portion.add(yellow);
+        const top = createSector(0.89, 0.34, uga, startAngle, endAngle);
+        top.position.y = cakeBaseY + 1.20;
+        portion.add(top);
+        const icing = createSector(0.91, 0.10, ugaWhite, startAngle, endAngle);
+        icing.position.y = cakeBaseY + 1.54;
+        portion.add(icing);
         if (i === 1) {
           const pipingDot = new THREE.Mesh(new THREE.SphereGeometry(0.09, 16, 12), color('#f4cf91', 0.38));
           pipingDot.position.set(0, cakeBaseY + 1.32, 0.62);
@@ -1192,7 +1227,6 @@
       fill.position.set(4.5, 4.2, 2.5);
       scene.add(fill);
       addRoomAndTable();
-      addCelebrationCakes();
       addCakeDetails();
       addKnife();
       addSlice();
@@ -1303,8 +1337,8 @@
       cutProgress.classList.remove('hidden');
       cutButton.classList.add('hidden');
       canvas.classList.add('interactive-cake');
-      document.querySelector('#canvasNote').textContent = 'move your cursor along the glowing line ✨';
-      statusTitle.textContent = 'Your turn to cut! 🔪';
+      document.querySelector('#canvasNote').textContent = `cut the ${cutLayers[cutLayerIndex]} layer ✨`;
+      statusTitle.textContent = `Cut the ${cutLayers[cutLayerIndex]} layer! 🔪`;
       statusMessage.textContent = 'Move your cursor along the whole glowing line. No click or drag needed.';
       showToast('Just move your cursor along the glowing guide.');
     });
@@ -1315,26 +1349,44 @@
       cutProgress.setAttribute('aria-valuenow', '100');
       cutProgressFill.style.width = '100%';
       progressLine.geometry.setDrawRange(0, cutRoute.length);
+      progressLine.visible = false;
+      guideLine.visible = false;
+      controls.enabled = true;
+      canvas.style.touchAction = 'pan-y';
+      knife.visible = false;
+      cutProgress.classList.add('hidden');
+      canvas.classList.remove('interactive-cake');
+      cutLayerIndex++;
+      cutProgressValue = 0;
+      cutProgress.setAttribute('aria-valuenow', '0');
+      cutProgressFill.style.width = '0%';
+      progressLine.geometry.setDrawRange(0, 0);
+
+      if (cutLayerIndex < cutLayers.length) {
+        phase = 'whole';
+        cutButton.classList.remove('hidden');
+        cutButton.innerHTML = `<span aria-hidden="true">🔪</span> Cut ${cutLayers[cutLayerIndex]} layer`;
+        statusTitle.textContent = `${cutLayers[cutLayerIndex - 1]} tier cut! ✨`;
+        statusMessage.textContent = `Now cut the ${cutLayers[cutLayerIndex]} layer.`;
+        document.querySelector('#canvasNote').textContent = `ready to cut the ${cutLayers[cutLayerIndex]} layer`;
+        showToast(`${cutLayers[cutLayerIndex - 1]} layer complete!`);
+        confettiBurst(70, 55);
+        return;
+      }
+
       phase = 'cut';
       wholeCakeGroup.visible = false;
       cutCakeGroup.visible = true;
       cakeDetails.forEach(detail => { detail.visible = false; });
       sliceGroup.visible = true;
       sliceGroup.position.set(0, 0, 0.42);
-      guideLine.visible = false;
-      progressLine.visible = false;
-      controls.enabled = true;
-      canvas.style.touchAction = 'pan-y';
-      knife.visible = false;
-      cutProgress.classList.add('hidden');
-      canvas.classList.remove('interactive-cake');
       canvas.classList.add('slice-clickable');
       document.querySelector('#canvasNote').textContent = 'click the separated slice to serve it';
       cutButton.classList.add('hidden');
       serveButton.classList.remove('hidden');
-      statusTitle.textContent = 'You cut the cake! ✨';
-      statusMessage.textContent = 'Click your slice or the button to move it onto your plate.';
-      showToast('Beautiful cut! Your slice is ready.');
+      statusTitle.textContent = 'All three tiers cut! ✨';
+      statusMessage.textContent = 'Your slice includes Purdue, Michigan, and UGA Honors colors.';
+      showToast('Three beautiful cuts. Your slice is ready!');
       confettiBurst(120, 70);
     }
 
