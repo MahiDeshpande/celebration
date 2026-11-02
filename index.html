@@ -576,9 +576,7 @@
       }
     }
 
-    feedMeButton.addEventListener('click', () => {
-      if (feedMeButton.disabled || !sliceParts.length) return;
-      feedMeButton.disabled = true;
+    function animateSliceToPhoto(sourceSlice, origin, onComplete) {
       memoryPhoto.classList.remove('feed-me');
       void memoryPhoto.offsetWidth;
       memoryPhoto.classList.add('feed-me');
@@ -586,13 +584,13 @@
 
       const existingFeedSlice = scene.getObjectByName('feedMeSlice');
       if (existingFeedSlice) scene.remove(existingFeedSlice);
-      const feedSlice = sliceParts[0].clone();
+      const feedSlice = sourceSlice.clone();
       feedSlice.name = 'feedMeSlice';
-      feedSlice.position.set(0, 0.1, 0.15);
+      feedSlice.position.copy(origin);
       feedSlice.scale.setScalar(0.72);
       feedSlice.visible = true;
-      feedSlice.traverse(child => { if (child.isMesh) { child.castShadow = true; child.receiveShadow = true; } });
       scene.add(feedSlice);
+      sourceSlice.visible = false;
       fork.visible = true;
 
       const started = performance.now();
@@ -604,7 +602,7 @@
         if (progress < 0.48) {
           const phase = progress / 0.48;
           const eased = phase * phase * (3 - 2 * phase);
-          position = new THREE.Vector3().lerpVectors(new THREE.Vector3(0.05, 2.35, 0.1), new THREE.Vector3(0.05, 2.1, 2.15), eased);
+          position = origin.clone().lerp(new THREE.Vector3(0.05, 2.1, 2.15), eased);
           feedScale = 0.72 + eased * 0.18;
           fork.rotation.set(-0.65 * eased, 0, -0.18);
         } else if (progress < 0.78) {
@@ -627,15 +625,24 @@
         if (progress < 1) window.requestAnimationFrame(animateFork);
         else {
           fork.visible = false;
-          feedSlice.visible = false;
+          scene.remove(feedSlice);
           memoryPhoto.style.transform = '';
           feedMeButton.disabled = false;
-          showToast('Num num num... the whole triple-layer slice reached me! 😋');
+          window.setTimeout(() => memoryPhoto.classList.remove('feed-me'), 300);
+          if (onComplete) onComplete();
         }
       };
       window.requestAnimationFrame(animateFork);
-      window.setTimeout(() => memoryPhoto.classList.remove('feed-me'), 2300);
-      showToast('A fresh triple-layer slice is coming toward you! 😋');
+    }
+
+    feedMeButton.addEventListener('click', () => {
+      if (feedMeButton.disabled || !sliceParts.length) return;
+      feedMeButton.disabled = true;
+      const freshSlice = sliceParts[0].clone();
+      animateSliceToPhoto(freshSlice, new THREE.Vector3(0.05, 2.35, 0.1), () => {
+        showToast('Num num num... a fresh triple-layer slice reached me! 😋');
+      });
+      showToast('A fresh triple-layer slice is coming from the cake! 😋');
     });
 
     function setRecordingStatus(message) {
@@ -1446,12 +1453,16 @@
     function takeBite() {
       if (phase !== 'plated' || activeTransition || biteCount >= 3) return;
       phase = 'biting';
-      activeTransition = 'bite';
-      transitionStart = performance.now();
       activeBitePart = sliceParts[biteCount];
+      activeTransition = 'bite';
       biteButton.disabled = true;
       statusTitle.textContent = `Bite ${biteCount + 1} of 3! 🍴`;
-      statusMessage.textContent = 'The fork is on its way.';
+      statusMessage.textContent = 'The fork and that triple-layer slice are coming to you.';
+      activeTransition = '';
+      animateSliceToPhoto(activeBitePart, servePosition.clone(), () => {
+        activeTransition = 'bite';
+        finishTransition();
+      });
     }
 
     biteButton.addEventListener('click', takeBite);
